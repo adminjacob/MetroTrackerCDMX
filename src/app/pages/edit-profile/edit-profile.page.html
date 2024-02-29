@@ -1,0 +1,61 @@
+<ion-header mode="ios" class="ion-no-border">
+  <ion-toolbar>
+    <ion-button (click)="goBack()" fill="clear" mode="ios" slot="start">
+      <ion-icon name="arrow-back-outline" ></ion-icon>
+    </ion-button>
+    <ion-title>Actualizar información</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="edit_profile_main_content">
+    <div class="user_image bg_image" (click)="getImage()" [style.backgroundImage]="'url(' + (imagenPerfil ? imagenPerfil : 'assets/imgs/hombre.png') + ')'">  </div>
+
+    <div class="input_box">
+      <ion-input type="text" placeholder="Correo" value="{{correo}}" disabled></ion-input>
+    </div>
+
+    <div class="input_box">
+      <ion-input type="text" placeholder="Fecha de nacimiento" value="{{fechaDeNacimiento}}" disabled></ion-input>
+    </div>
+
+    <div class="input_box">
+      <ion-input type="text" placeholder="Genero" value="{{genero}}" disabled></ion-input>
+    </div>
+
+    <form #updateForm="ngForm" (ngSubmit)="updateUser(updateForm)">
+      <div class="input_box">
+        <ion-input type="text" placeholder="Nombre completo" name="nombreCompleto" #nombreCompletoRef="ngModel" [(ngModel)]="nombreCompleto" required ngModel></ion-input>
+      </div>
+    
+      <div class="input_box">
+        <ion-input [type]="viewPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" #passwordRef="ngModel" required [pattern]="passwordPattern" placeholder="Contraseña" ngModel></ion-input>
+      </div>
+      
+      <div class="input_box">
+        <ion-input [type]="viewPassword ? 'text' : 'password'" [(ngModel)]="confirmPassword" name="confirmPassword"  required  placeholder="Confirmar contraseña" ngModel></ion-input>
+      </div>
+        
+      <div *ngIf="submitAttempted && nombreCompletoRef.errors?.['required']" class="error-message">
+        El nombre completo es requerido.
+      </div>
+
+      <div *ngIf="submitAttempted && passwordRef.errors?.['required']" class="error-message">
+        La contraseña es requerida
+      </div>
+      
+      <div *ngIf="submitAttempted && passwordRef.errors?.['pattern']" class="error-message">
+        La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, un número y un caracter especial.
+      </div>
+
+      <div *ngIf="submitAttempted && passwordsDontMatch" class="error-message">
+        Las contraseñas no coinciden.
+      </div>
+    
+      <ion-button type="submit" expand="block" mode="ios">
+        Actualizar Información
+      </ion-button>
+    </form>
+
+  </div>
+</ion-content>

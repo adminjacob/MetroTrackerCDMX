@@ -1,0 +1,14 @@
+.scrollable-list {
+    height: 200px;
+    overflow-y: auto; 
+  }
+
+  .estacion-seleccionada {
+    --background: var(--ion-color-primary); /* Cambia el color de fondo al color primario de Ionic */
+    color: var(--ion-color-primary-contrast); /* Asegura que el texto tenga un contraste adecuado */
+  }
+
+  .error-message {
+    color: red;
+    font-size: 0.8em;
+}

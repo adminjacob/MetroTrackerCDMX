@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Seleccionar Linea</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancelar</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="search()">Buscar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar></ion-searchbar>
+  <ion-list>
+    <!-- Lista de líneas y direcciones -->
+    <ion-item>
+      Línea 1 - Dirección: Observatorio
+    </ion-item>
+    <ion-item>
+      Línea 1 - Dirección: Pantitlan
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Afluencia</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let item of items" lines="none">
+      <ion-thumbnail slot="start">
+        <img [src]="'../../../assets/imgs/lineas/'+item.imagen">
+      </ion-thumbnail>
+      <ion-label class="ion-text-wrap">
+        <h2 (click)="goToDetail(item.direccion1)">{{ item.direccion1 }}</h2>
+        <h2 (click)="goToDetail(item.direccion2)">{{ item.direccion2 }}</h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
+

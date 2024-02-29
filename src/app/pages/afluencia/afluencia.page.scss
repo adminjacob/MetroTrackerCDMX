@@ -1,0 +1,17 @@
+ion-thumbnail {
+    --size: auto;  /* Desactiva el tamaño predeterminado */
+    width: 8rem;  /* Ajusta el ancho del thumbnail */
+    height: 8rem;  /* Ajusta el alto del thumbnail */
+}
+
+ion-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;  /* Alinea el texto a la izquierda pero lo mantiene centrado verticalmente */
+}
+  
+h2 {
+    font-size: 1.5rem;  /* Ajusta el tamaño del texto */
+}
+  

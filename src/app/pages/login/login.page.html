@@ -1,0 +1,62 @@
+<ion-content>
+  <div class="main-content">
+    <div class="top-content">
+      <img src="assets/imgs/completoSaturado.PNG" alt="" class="logo" style="width: 200px; height: auto;">
+    </div>
+
+    <div class="bottom-content">
+      <form #loginForm="ngForm" (ngSubmit)="onLogin()">
+      <ion-item>
+        <div class="input_box">
+          <ion-input type="text" [(ngModel)]="correo" name="correo" #correoRef="ngModel" required email placeholder="Correo"></ion-input>
+        </div>
+      </ion-item>
+      <br>
+      <ion-item>
+        <div class="input_box">
+          <ion-input [type]="viewPassword == true ? 'text' : 'password'" [(ngModel)]="contrasena" name="contrasena" #contrasenaRef="ngModel" required placeholder="Contraseña"></ion-input>
+          <ion-button (click)="changeType()" fill="clear" slot="end" class="toggle_btn">
+            <ion-icon slot="icon-only" [name]="viewPassword == true ? 'eye-outline' : 'eye-off-outline'"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item>
+
+      <div class="reset ion-activatable ripple-parent" (click)="reset()">
+        <p>¿Olvidaste tu contraseña?</p>
+        <ion-ripple-effect></ion-ripple-effect>
+      </div>
+
+      <ion-button type="submit" expand="block" shape="round" class="login-btn">
+        Iniciar sesión
+      </ion-button>
+
+      </form>
+
+      <div *ngIf="submitAttempted && correoRef.errors?.['required']" class="error-message">
+        El correo es requerido.
+      </div>
+      <div *ngIf="submitAttempted && correoRef.errors?.['email']" class="error-message">
+        Por favor introduce un correo válido.
+      </div>
+      <div *ngIf="submitAttempted && contrasenaRef.errors?.['required']" class="error-message">
+        La contraseña es requerida.
+      </div>
+
+      <p class="or-text"> <span>o ingresa sin iniciar sesion</span> </p>
+
+      <div class="ingresar">
+        <ion-button type="submit" expand="block" shape="round" class="login-btn">
+          Ingresar
+        </ion-button>
+      </div>
+
+      <div class="register">
+        <p>¿No tienes una cuenta? </p>
+        <div class="regiterBtn ion-activatable ripple-parent" (click)="onRegister()">
+          <p>Registrate</p>
+            <ion-ripple-effect></ion-ripple-effect>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

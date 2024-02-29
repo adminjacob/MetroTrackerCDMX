@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="segment" mode="md">
+      <ion-segment-button value="avance">
+        <ion-label>Avance de trenesss</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="anuncios">
+        <ion-label>Anuncios oficiales</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <!-- Última actualización -->
+  <ion-toolbar>
+    <ion-title size="small" style="text-align: center;">
+      Última actualización: {{ ultimoTiempoActualizacion | date: 'dd/MM/yyyy HH:mm' }}
+    </ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div *ngIf="segment === 'avance'">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" *ngFor="let linea of lineas">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>{{ linea.nombre }}</ion-card-title>
+            </ion-card-header>
+            
+            <ion-card-content>
+              <img [src]="'../../../assets/imgs/lineas/'+linea.imagen" alt="{{linea.nombre}}">
+              <p>Tiempo estimado: {{ linea.tiempo }} minutos</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div *ngIf="segment === 'anuncios'">
+    <ion-card *ngFor="let tweet of tweets">
+      <ion-card-header>
+        <div style="display: flex; align-items: center;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Metro_de_la_Ciudad_de_M%C3%A9xico_logo.svg/1019px-Metro_de_la_Ciudad_de_M%C3%A9xico_logo.svg.png" style="width: 3rem; height: 3rem; margin-right: 10px;">
+          <div>
+            <ion-card-title>@MetroCDMX</ion-card-title>
+            <ion-card-subtitle>{{ tweet.fecha }}</ion-card-subtitle>
+          </div>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ tweet.mensaje }}</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

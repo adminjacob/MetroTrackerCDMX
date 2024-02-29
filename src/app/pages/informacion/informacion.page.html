@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Informacion general</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div id="map"></div>
+
+  <div class="div1" id='item'>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Información General</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Horario de servicio:</strong> Días Laborales de 5:00 a 24:00 horas. Sábados de 6:00 a 24:00 horas. Domingos y días festivos de 7:00 a 24:00 horas.</p>
+        <p><strong>Acceso gratuito a:</strong> Adultos mayores, Personas con discapacidad, Niños menores de 5 años, Jóvenes del INJUVE y Policías uniformados.</p>
+        <p><strong>Costo del boleto:</strong> $5 pesos.</p>
+      </ion-card-content>
+    </ion-card>
+  
+    <ion-card (click)="openMap()">
+      <ion-card-header>
+        <ion-card-title>Mapa del Metro CDMX</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-img src="https://metro-cdmx.com.mx/wp-content/uploads/2022/04/plano-red-metro-cdmx.jpg" alt="Metro CDMX"></ion-img>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  
+</ion-content>

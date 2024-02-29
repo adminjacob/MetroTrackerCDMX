@@ -1,0 +1,24 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="md" color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h2 class="head-title">Verificación</h2>
+  <p class="sub-title">Ingresa el codigo de 5 digitos que acabamos de enviar a tu correo</p>
+  <div class="otp-content"> 
+    <ng-otp-input
+      [config]="{length:5,inputStyles:{'border-radius':'0px','width': '40px','height': '40px','border':'none','border-bottom':'2px solid lightgray','background-color':'white'}}">
+    </ng-otp-input>
+  </div>
+
+  <ion-button (click)="onContinue()" expand="block" shape="round" class="login-btn">
+    Continuar
+  </ion-button>
+
+</ion-content>

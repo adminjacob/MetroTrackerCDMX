@@ -1,0 +1,44 @@
+<ion-content>
+  <ion-slides (ionSlideDidChange)="slideChanged($event)" #slides>
+    <ion-slide>
+      <div class="slide-content">
+        <div [style.backgroundImage]="'url(assets/imgs/sliders/1.jpg)'" class="back_img">
+        </div>
+        <ion-label class="head-title">Afluencia de personas</ion-label>
+        <ion-label class="sub-title">Obten informacion en tiempo real de cuantas personas hay en tiempo real en cada estacion del Metro de la Ciudad de México
+        </ion-label>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="slide-content">
+        <div [style.backgroundImage]="'url(assets/imgs/sliders/2.png)'" class="back_img">
+        </div>
+        <ion-label class="head-title">Anuncios oficiales y comunidad</ion-label>
+        <ion-label class="sub-title">Consulta los anuncios oficiales del Twitter del Metro de la Ciudad de México, ademas de los reportes que realiza la comunidad
+        </ion-label>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="slide-content">
+        <div [style.backgroundImage]="'url(assets/imgs/sliders/3.jpg)'" class="back_img">
+        </div>
+        <ion-label class="head-title">Avance de trenes</ion-label>
+        <ion-label class="sub-title">Consulta el avance de trenes del Metro de la Ciudad de México
+        </ion-label>
+
+        <ion-button (click)="onLogin()" expand="block" shape="round">
+          Iniciar Sesión
+        </ion-button>
+      </div>
+    </ion-slide>
+  </ion-slides>
+
+  <div class="pagers">
+    <div *ngFor="let item of items" [class]="item == index ?'active':'deactive'"></div>
+  </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isLast == false">
+    <ion-fab-button (click)="onLogin()">
+      Saltar
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

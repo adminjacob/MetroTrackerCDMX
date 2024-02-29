@@ -1,0 +1,18 @@
+ion-card {
+    --ion-safe-area-top: 20px;
+    --ion-safe-area-bottom: 20px;
+}
+
+ion-card-title {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+ion-card-content img {
+    --size: auto;  /* Activa el tamaño predeterminado */
+}
+
+ion-card-header img {
+    width: 1rem;
+    height: 1rem;
+}

@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button (click)="goBack()" fill="clear" mode="ios" slot="start">
+      <ion-icon name="arrow-back-outline" ></ion-icon>
+    </ion-button>
+    <ion-title>Reportar Problema</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <form #reportForm="ngForm" (ngSubmit)="submitReport()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">Nombre del Reporte</ion-label>
+        <ion-select [(ngModel)]="reporte.titulo" name="titulo" #tituloRef="ngModel" required>
+          <ion-select-option value="Ocurrió un accidente">Ocurrió un accidente</ion-select-option>
+          <ion-select-option value="La marcha es lenta">La marcha es lenta</ion-select-option>
+          <ion-select-option value="El tren ha tardado más de X minutos en pasar">El tren ha tardado más de X minutos en pasar</ion-select-option>
+          <ion-select-option value="Ocurrió un robo">Ocurrió un robo</ion-select-option>
+          <ion-select-option value="Ocurrió una pelea">Ocurrió una pelea</ion-select-option>
+          <ion-select-option value="Vagoneros en andenes">Vagoneros en andenes</ion-select-option>
+          <ion-select-option value="Trenes detenidos">Trenes detenidos</ion-select-option>
+          <ion-select-option value="Problemas estructurales">Problemas estructurales</ion-select-option>
+          <ion-select-option value="Estaciones fuera de servicio">Estaciones fuera de servicio</ion-select-option>
+          <ion-select-option value="Cantidad de gente en andenes">Cantidad de gente en andenes</ion-select-option>
+          <ion-select-option value="Funcionamiento del Wi-Fi">Funcionamiento del Wi-Fi</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Descripción (Opcional)</ion-label>
+        <ion-textarea [(ngModel)]="reporte.descripcion" name="descripcion"></ion-textarea>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label position="stacked">Estaciones más cercanas</ion-label>
+        <ion-select [(ngModel)]="estacionSeleccionada" name="estacionSeleccionada" #estacionSeleccionadaRef="ngModel" required (ionChange)="actualizarReporte(estacionSeleccionada)">
+          <ion-select-option *ngFor="let estacion of estacionesCercanas" [value]="estacion">
+            {{ estacion.linea }} - {{ estacion.estacion }} - {{ estacion.direccion }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label position="stacked">Buscar estación</ion-label>
+        <ion-input type="text" placeholder="Escribe para buscar..." (ionInput)="filtrarEstaciones($event.target.value)"></ion-input>
+      </ion-item>
+      
+      <div class="scrollable-list">
+        <ion-list>
+          <ion-item *ngFor="let estacion of estacionesFiltradas"
+                    [ngClass]="{'estacion-seleccionada': estacionSeleccionada === estacion}"
+                    (click)="actualizarReporte(estacion)">
+            {{ estacion.linea }} - {{ estacion.estacion }} - {{ estacion.direccion }}
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <br>
+  
+      <ion-button expand="block" fill="outline" (click)="getImage()">
+        <ion-icon slot="start" name="image"></ion-icon>
+        Tomar Fotografia
+      </ion-button>
+
+    </ion-list>
+    <br>
+    <ion-button type="submit" expand="full">
+      Reportar
+    </ion-button>
+
+  </form>
+
+  
+
+  <!-- Mensajes de error -->
+  <div *ngIf="submitAttempted && tituloRef.errors?.['required']" class="error-message">
+    Se requiere seleccionar el nombre del reporte.
+  </div>
+  <div *ngIf="submitAttempted && estacionSeleccionadaRef.errors?.['required']" class="error-message">
+    Se requiere seleccionar una estación.
+  </div>
+</ion-content>

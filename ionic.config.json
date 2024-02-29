@@ -1,0 +1,7 @@
+{
+  "name": "Metro Tracker CDMX",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Comunidad</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-button expand="full" (click)="nuevoReporte()">Nuevo Reporte</ion-button>
+
+  <ion-segment [scrollable]="true" (ionChange)="onSegmentChange($event)">
+    <ion-segment-button value="general">General</ion-segment-button>
+    <ion-segment-button value="linea">Línea y Dirección</ion-segment-button>
+    <ion-segment-button value="votados">Más Votados</ion-segment-button>
+    <ion-segment-button value="estacion">Por Estación</ion-segment-button>
+  </ion-segment>
+
+  <ion-list>
+    <ion-card *ngFor="let reporte of reportes">
+        <ion-item>
+            <ion-avatar slot="start">
+              <img class="user-image" *ngIf="reporte.imagenPerfil; else defaultImage" [src]="reporte.imagenPerfil" alt="Foto de perfil">
+              <ng-template #defaultImage>
+                <img class="user-image" src="assets/imgs/hombre.png" alt="Foto de perfil predeterminada">
+              </ng-template>
+            </ion-avatar>
+            <ion-label>
+                <h2>{{ reporte.autor }}</h2>
+                <p>{{ reporte.fechaHora | date: 'dd/MM/yyyy h:mm a' }}</p>
+            </ion-label>
+        </ion-item>
+        <ion-card-content>
+            <p>{{ reporte.linea }}</p>
+            <p>Estación: {{ reporte.estacion }}</p>
+            <p>Dirección: {{ reporte.direccion }}</p>
+            <p>Reporte: {{ reporte.titulo }}</p>
+            <p>Descripcion: {{ reporte.descripcion }}</p>
+            <img *ngIf="reporte.imagen" [src]="reporte.imagen" alt="Imagen del reporte">
+            <br>
+            <ion-row>
+              <ion-col size="3">
+                  <ion-button fill="clear" (click)="likeReporte(reporte.id)">
+                    <ion-icon name="heart-outline"></ion-icon>
+                  </ion-button>
+                  {{ reporte.likes }}
+              </ion-col>
+              <ion-col size="3">
+                  <ion-button fill="clear" (click)="dislikeReporte(reporte.id)">
+                      <ion-icon name="heart-dislike-outline"></ion-icon>
+                  </ion-button>
+                  {{ reporte.dislikes }}
+              </ion-col>
+          </ion-row>
+        </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>

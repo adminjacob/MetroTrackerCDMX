@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Reportes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="descargarCSV()">
+        <ion-icon slot="icon-only" name="download-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-segment [scrollable]="true" (ionChange)="onSegmentChange($event)">
+    <ion-segment-button value="general">General</ion-segment-button>
+    <ion-segment-button value="linea">Línea y Dirección</ion-segment-button>
+    <ion-segment-button value="votados">Más Votados</ion-segment-button>
+    <ion-segment-button value="estacion">Por Estación</ion-segment-button>
+  </ion-segment>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let reporte of reportes">
+      <ion-item>
+        <!-- Aquí va el contenido del reporte -->
+        <ion-avatar slot="start">
+          <img [src]="reporte.fotoPerfil" alt="Foto de perfil">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ reporte.nombre }}</h2>
+          <p>{{ reporte.fechaHora }}</p>
+        </ion-label>
+      </ion-item>
+      <ion-card-content>
+        <p>{{ reporte.linea }}</p>
+        <p>Estación: {{ reporte.estacion }}</p>
+        <p>Reporte: {{ reporte.texto }}</p>
+        <img *ngIf="reporte.imagen" [src]="reporte.imagen" alt="Imagen del reporte">
+      </ion-card-content>
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="confirmarEliminacion(reporte)">
+          Eliminar
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
