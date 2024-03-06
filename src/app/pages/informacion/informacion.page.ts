@@ -27,9 +27,8 @@ export class InformacionPage implements OnInit {
   ngOnInit() {
     this.accesibilidadService.obtenerLista().subscribe((result)=>{
       this.markers=result;
+      this.loadMap();
     });
-    this.loadMap();
-
   }
 
   loadMap() {

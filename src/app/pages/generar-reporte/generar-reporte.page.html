@@ -13,7 +13,7 @@
     <ion-list>
       <ion-item>
         <ion-label position="stacked">Nombre del Reporte</ion-label>
-        <ion-select [(ngModel)]="reporte.titulo" name="titulo" #tituloRef="ngModel" required>
+        <ion-select [(ngModel)]="reporte.titulo" interface="action-sheet" name="titulo" #tituloRef="ngModel" required>
           <ion-select-option value="Ocurrió un accidente">Ocurrió un accidente</ion-select-option>
           <ion-select-option value="La marcha es lenta">La marcha es lenta</ion-select-option>
           <ion-select-option value="El tren ha tardado más de X minutos en pasar">El tren ha tardado más de X minutos en pasar</ion-select-option>
@@ -34,7 +34,7 @@
       
       <ion-item>
         <ion-label position="stacked">Estaciones más cercanas</ion-label>
-        <ion-select [(ngModel)]="estacionSeleccionada" name="estacionSeleccionada" #estacionSeleccionadaRef="ngModel" required (ionChange)="actualizarReporte(estacionSeleccionada)">
+        <ion-select [(ngModel)]="estacionSeleccionada" interface="action-sheet" name="estacionSeleccionada" #estacionSeleccionadaRef="ngModel" required (ionChange)="actualizarReporte(estacionSeleccionada)">
           <ion-select-option *ngFor="let estacion of estacionesCercanas" [value]="estacion">
             {{ estacion.linea }} - {{ estacion.estacion }} - {{ estacion.direccion }}
           </ion-select-option>
