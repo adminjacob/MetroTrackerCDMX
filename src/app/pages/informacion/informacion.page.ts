@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Geolocation } from '@capacitor/geolocation';
 import { AccesibilidadService } from 'src/app/services/accesibilidad.service';
 declare var google;
 
@@ -27,7 +28,44 @@ export class InformacionPage implements OnInit {
   ngOnInit() {
     this.accesibilidadService.obtenerLista().subscribe((result)=>{
       this.markers=result;
+      const miUbicacion = this.getCurrentPosition();
+      console.log(miUbicacion);
       this.loadMap();
+    });
+  }
+
+  async checkPermissions() {
+    const hasPermission = await Geolocation.checkPermissions();
+    if (hasPermission.location !== 'granted') {
+      await Geolocation.requestPermissions();
+    }
+  }
+
+  async getCurrentPosition() {
+    this.checkPermissions();
+    try {
+      const coordinates = await Geolocation.getCurrentPosition();
+      const currentPosition = {
+        lat: coordinates.coords.latitude,
+        lng: coordinates.coords.longitude
+      };
+      this.addCurrentLocationMarker(currentPosition);
+    } catch (e) {
+      console.error('Error getting location', e);
+    }
+  }
+
+  addCurrentLocationMarker(position: {lat: number, lng: number}) {
+    const marker = new google.maps.Marker({
+      position,
+      map: this.map,
+      title: 'Tu ubicación',
+      icon: {
+        url: 'https://i.stack.imgur.com/pQ1Cq.png',
+        scaledSize: new google.maps.Size(50, 50),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(25, 50) 
+      }
     });
   }
 
@@ -44,6 +82,7 @@ export class InformacionPage implements OnInit {
   
     google.maps.event.addListenerOnce(this.map, 'idle', () => {
       this.renderMarkers();
+      this.getCurrentPosition();
       mapEle.classList.add('show-map');
     });
   }

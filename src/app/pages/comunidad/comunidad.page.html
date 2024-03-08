@@ -35,7 +35,7 @@
             <p>Reporte: {{ reporte.titulo }}</p>
             <p>Descripcion: {{ reporte.descripcion }}</p>
             <br>
-            <img *ngIf="reporte.imagen" [src]="reporte.imagen" alt="Imagen del reporte">
+            <img *ngIf="reporte.imagen" [src]="reporte.imagen" alt="Imagen del reporte" (click)="openImageFullScreen(reporte.imagen)">
             <ion-button fill="clear" (click)="likeReporte(reporte.id)" [color]="usuarioHaDadoLike(reporte.id) ? 'primary' : 'medium'">
               <ion-icon slot="icon-only" name="heart"></ion-icon>
               <span class="like-dislike-count">{{ reporte.likes }}</span>

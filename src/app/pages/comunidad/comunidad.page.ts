@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReportService } from 'src/app/services/report.service';
+import { ModalController } from '@ionic/angular';
+import { FullScreenImageComponent } from '../../full-screen-image/full-screen-image.component';
 
 @Component({
   selector: 'app-comunidad',
@@ -11,17 +13,26 @@ export class ComunidadPage implements OnInit {
   reportes: any = [];
   idUser: string = "";
 
-  constructor(private router: Router, private reporteService: ReportService) { }
+  constructor(private router: Router, private reporteService: ReportService, private modalController: ModalController) { }
 
   ngOnInit() {
     this.idUser = localStorage.getItem('id') || '';
     this.cargarReportes();
   }
 
+  async openImageFullScreen(imageUrl: string) {
+    const modal = await this.modalController.create({
+      component: FullScreenImageComponent,
+      componentProps: {
+        imageUrl: imageUrl
+      }
+    });
+    return await modal.present();
+  }
+
   cargarReportes() {
     this.reporteService.obtenerReportes().subscribe(result => {
       this.reportes = result;
-      console.log(this.reportes);
     });
   }
 
