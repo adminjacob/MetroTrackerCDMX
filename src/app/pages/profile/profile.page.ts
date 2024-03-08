@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
-import { SafeUrl } from '@angular/platform-browser';
+import { Browser } from '@capacitor/browser';
 
 @Component({
   selector: 'app-profile',
@@ -37,11 +37,6 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  logout() {
-    localStorage.clear();
-    this.navCtrl.navigateRoot(['/intro']);
-  }
-
   updateInfo() {
     this.router.navigate(['edit-profile']);
   }
@@ -49,4 +44,15 @@ export class ProfilePage implements OnInit {
   irANotificaciones(){
     this.navCtrl.navigateForward('/notificaciones');
   }
+
+  async abrirPDF() {
+    await Browser.open({ url: '../assets/pdf/tyc.pdf' });
+  }
+
+  logout() {
+    localStorage.clear();
+    this.navCtrl.navigateRoot(['/intro']);
+  }
+
+  
 }

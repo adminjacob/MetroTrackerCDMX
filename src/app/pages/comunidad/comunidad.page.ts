@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ReportService } from 'src/app/services/report.service';
 import { ModalController } from '@ionic/angular';
 import { FullScreenImageComponent } from '../../full-screen-image/full-screen-image.component';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-comunidad',
@@ -13,7 +14,7 @@ export class ComunidadPage implements OnInit {
   reportes: any = [];
   idUser: string = "";
 
-  constructor(private router: Router, private reporteService: ReportService, private modalController: ModalController) { }
+  constructor(private router: Router, private reporteService: ReportService, private modalController: ModalController, private loadingController: LoadingController) { }
 
   ngOnInit() {
     this.idUser = localStorage.getItem('id') || '';
@@ -30,9 +31,18 @@ export class ComunidadPage implements OnInit {
     return await modal.present();
   }
 
-  cargarReportes() {
-    this.reporteService.obtenerReportes().subscribe(result => {
+  async cargarReportes() {
+    const loading = await this.loadingController.create({
+      message: 'Cargando reportes...'
+    });
+    await loading.present();
+  
+    this.reporteService.obtenerReportes().subscribe(async result => {
       this.reportes = result;
+      await loading.dismiss();
+    }, async error => {
+      console.error('Error al cargar los reportes: ', error);
+      await loading.dismiss();
     });
   }
 
