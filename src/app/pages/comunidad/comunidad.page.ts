@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReportService } from 'src/app/services/report.service';
-import { ModalController } from '@ionic/angular';
-import { FullScreenImageComponent } from '../../full-screen-image/full-screen-image.component';
+import { AlertController, ModalController } from '@ionic/angular';
+import { FullScreenImageComponent } from '../../components/full-screen-image/full-screen-image.component';
 import { LoadingController } from '@ionic/angular';
 
 @Component({
@@ -14,11 +14,69 @@ export class ComunidadPage implements OnInit {
   reportes: any = [];
   idUser: string = "";
 
-  constructor(private router: Router, private reporteService: ReportService, private modalController: ModalController, private loadingController: LoadingController) { }
+  constructor(private router: Router, 
+    private reporteService: ReportService, 
+    private modalController: ModalController, 
+    private loadingController: LoadingController,
+    private alertController: AlertController) { }
 
   ngOnInit() {
     this.idUser = localStorage.getItem('id') || '';
     this.cargarReportes();
+  }
+
+  async cargarReportes(query = {}) {
+    const loading = await this.loadingController.create({
+      message: 'Cargando reportes...'
+    });
+    await loading.present();
+  
+    // Modifica la llamada para incluir el objeto de consulta
+    // Asegúrate de que tu servicio de reportes esté preparado para aceptar y procesar este objeto
+    this.reporteService.obtenerReportes(query).subscribe(async result => {
+      this.reportes = result;
+      await loading.dismiss();
+    }, async error => {
+      console.error('Error al cargar los reportes: ', error);
+      await loading.dismiss();
+    });
+  }
+
+  async mostrarPopupFiltro() {
+    const alert = await this.alertController.create({
+      header: 'Filtrar Reportes',
+      inputs: [
+        {
+          name: 'sort',
+          type: 'radio',
+          label: 'Más Votados',
+          value: 'masVotados',
+        },
+        {
+          name: 'sort',
+          type: 'radio',
+          label: 'Menos Votados',
+          value: 'menosVotados',
+        },
+        // Agrega aquí más opciones según necesites
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Aplicar',
+          handler: (data) => {
+            // Aquí construimos el objeto de consulta basado en la selección del usuario
+            let query = { sort: data };
+            this.cargarReportes(query);
+          },
+        },
+      ],
+    });
+  
+    await alert.present();
   }
 
   async openImageFullScreen(imageUrl: string) {
@@ -29,21 +87,6 @@ export class ComunidadPage implements OnInit {
       }
     });
     return await modal.present();
-  }
-
-  async cargarReportes() {
-    const loading = await this.loadingController.create({
-      message: 'Cargando reportes...'
-    });
-    await loading.present();
-  
-    this.reporteService.obtenerReportes().subscribe(async result => {
-      this.reportes = result;
-      await loading.dismiss();
-    }, async error => {
-      console.error('Error al cargar los reportes: ', error);
-      await loading.dismiss();
-    });
   }
 
   nuevoReporte() {
@@ -90,7 +133,4 @@ export class ComunidadPage implements OnInit {
     return reporte && reporte.usuariosQueDieronDislike.includes(this.idUser);
   }
 
-  onSegmentChange(event) {
-    // Implementar según la necesidad
-  }
 }

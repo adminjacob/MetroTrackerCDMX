@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PasswordChangedPageModule } from './pages/password-changed/password-changed.module';
 import { HttpClientModule } from '@angular/common/http';
-import { FullScreenImageComponent } from './full-screen-image/full-screen-image.component';
+import { FullScreenImageComponent } from './components/full-screen-image/full-screen-image.component';
 
 @NgModule({
     declarations: [AppComponent, FullScreenImageComponent],
