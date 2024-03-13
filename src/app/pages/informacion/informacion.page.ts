@@ -29,7 +29,6 @@ export class InformacionPage implements OnInit {
     this.accesibilidadService.obtenerLista().subscribe((result)=>{
       this.markers=result;
       const miUbicacion = this.getCurrentPosition();
-      console.log(miUbicacion);
       this.loadMap();
     });
   }

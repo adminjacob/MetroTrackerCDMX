@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { ReportService } from 'src/app/services/report.service';
-import { AlertController, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { FullScreenImageComponent } from '../../components/full-screen-image/full-screen-image.component';
 import { LoadingController } from '@ionic/angular';
+import { DatosFiltroService } from '../../services/datos-filtro.service';
 
 @Component({
   selector: 'app-comunidad',
@@ -13,12 +15,27 @@ import { LoadingController } from '@ionic/angular';
 export class ComunidadPage implements OnInit {
   reportes: any = [];
   idUser: string = "";
+  filtro: any = {};
+  previousUrl: string = '';
 
   constructor(private router: Router, 
     private reporteService: ReportService, 
     private modalController: ModalController, 
     private loadingController: LoadingController,
-    private alertController: AlertController) { }
+    private datosFiltroService: DatosFiltroService) {
+      this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        if(this.previousUrl && event.url === '/tabs/tab3' && this.previousUrl === '/filtro-reportes') {
+          // La lógica que se ejecutara solo cuando vengamos de /filtro-reportes
+          this.filtro = this.datosFiltroService.getDatosFiltro();
+          console.log(this.filtro);
+          this.cargarReportes(this.filtro);
+        }
+        // Actualiza la URL anterior después de toda la lógica para no sobrescribir con la actual prematuramente
+        this.previousUrl = event.url;
+      });
+  }
 
   ngOnInit() {
     this.idUser = localStorage.getItem('id') || '';
@@ -31,8 +48,6 @@ export class ComunidadPage implements OnInit {
     });
     await loading.present();
   
-    // Modifica la llamada para incluir el objeto de consulta
-    // Asegúrate de que tu servicio de reportes esté preparado para aceptar y procesar este objeto
     this.reporteService.obtenerReportes(query).subscribe(async result => {
       this.reportes = result;
       await loading.dismiss();
@@ -42,41 +57,8 @@ export class ComunidadPage implements OnInit {
     });
   }
 
-  async mostrarPopupFiltro() {
-    const alert = await this.alertController.create({
-      header: 'Filtrar Reportes',
-      inputs: [
-        {
-          name: 'sort',
-          type: 'radio',
-          label: 'Más Votados',
-          value: 'masVotados',
-        },
-        {
-          name: 'sort',
-          type: 'radio',
-          label: 'Menos Votados',
-          value: 'menosVotados',
-        },
-        // Agrega aquí más opciones según necesites
-      ],
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-        },
-        {
-          text: 'Aplicar',
-          handler: (data) => {
-            // Aquí construimos el objeto de consulta basado en la selección del usuario
-            let query = { sort: data };
-            this.cargarReportes(query);
-          },
-        },
-      ],
-    });
-  
-    await alert.present();
+  navegarAFiltroReportes() {
+    this.router.navigate(['/filtro-reportes']);
   }
 
   async openImageFullScreen(imageUrl: string) {

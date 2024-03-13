@@ -87,7 +87,12 @@ const routes: Routes = [
   {
     path: 'linea-direccion',
     loadChildren: () => import('./pages/linea-direccion/linea-direccion.module').then( m => m.LineaDireccionPageModule)
+  },
+  {
+    path: 'filtro-reportes',
+    loadChildren: () => import('./pages/filtro-reportes/filtro-reportes.module').then( m => m.FiltroReportesPageModule)
   }
+
 
 ];
 @NgModule({

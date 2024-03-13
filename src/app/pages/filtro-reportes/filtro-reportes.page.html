@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button (click)="goBack()" fill="clear" mode="ios" slot="start">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-title>Filtro de Reportes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="onSubmit()" #filtroForm="ngForm">
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Votos</ion-label>
+      </ion-list-header>
+      <ion-radio-group [(ngModel)]="filtro.sort" name="votos">
+        <ion-item>
+          <ion-label>Más Votados</ion-label>
+          <ion-radio slot="start" value="masVotados"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Menos Votados</ion-label>
+          <ion-radio slot="start" value="menosVotados"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+
+      <ion-item>
+        <ion-label position="stacked">Seleccione la Línea:</ion-label>
+        <ion-select [(ngModel)]="filtro.linea" interface="action-sheet" name="linea" (ionChange)="onLineaChange($event)">
+          <ion-select-option value="Línea 1">Línea 1</ion-select-option>
+          <ion-select-option value="Línea 2">Línea 2</ion-select-option>
+          <ion-select-option value="Línea 3">Línea 3</ion-select-option>
+          <ion-select-option value="Línea 4">Línea 4</ion-select-option>
+          <ion-select-option value="Línea 5">Línea 5</ion-select-option>
+          <ion-select-option value="Línea 6">Línea 6</ion-select-option>
+          <ion-select-option value="Línea 7">Línea 7</ion-select-option>
+          <ion-select-option value="Línea 8">Línea 8</ion-select-option>
+          <ion-select-option value="Línea 9">Línea 9</ion-select-option>
+          <ion-select-option value="Línea A">Línea A</ion-select-option>
+          <ion-select-option value="Línea B">Línea B</ion-select-option>
+          <ion-select-option value="Línea 12">Línea 12</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Dirección:</ion-label>
+        <ion-select [(ngModel)]="filtro.direccion" interface="action-sheet" name="direccion">
+          <ion-select-option *ngFor="let direccion of opcionesDireccionActuales" [value]="direccion">
+            {{ direccion }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-button type="submit" expand="block" fill="outline" class="ion-margin-top">
+        Aplicar Filtro
+      </ion-button>
+    </ion-list>
+  </form>
+</ion-content>
+
+
+
