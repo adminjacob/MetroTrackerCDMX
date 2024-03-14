@@ -26,13 +26,8 @@ export class AdministradorUsuariosPage implements OnInit {
   ngOnInit() {
     this.userService.getUsers().subscribe((result:any)=>{
       this.usuarios = result;
-      this.usuariosFiltrados = result;
-
-      
-      console.log(this.usuarios);
-
+      this.usuariosFiltrados = result;;
     });    
-    
   }
 
   buscarUsuarios() {

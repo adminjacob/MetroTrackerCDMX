@@ -37,5 +37,10 @@ export class ReportService {
   dislikeReporte(reportId: string, userId: string) {
     return this.http.post(`${this.apiUrl}/${reportId}/dislike`, { userId: userId });
   }
+
+  // Eliminar un reporte
+  deleteReport(id: string) {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
   
 }
