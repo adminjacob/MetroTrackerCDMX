@@ -48,6 +48,11 @@ export class GenerarReportePage implements OnInit {
     this.id=this.userService.decrypt(encryptedId);
     this.reporte.id_usuario = this.id;
 
+    //Local
+    /*this.estaciones=this.estacionesService.obtenerListaLocal();
+    this.estacionesFiltradas = this.estacionesService.obtenerListaLocal();*/
+
+    //Internet
     this.estacionesService.obtenerLista().subscribe(async result => {
         this.estaciones = result;
         this.estacionesFiltradas = result;
