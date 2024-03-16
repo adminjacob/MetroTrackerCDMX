@@ -32,12 +32,14 @@ export class EditProfilePage implements OnInit {
   confirmPassword: string="";
   passwordsDontMatch: boolean = false;
 
-  constructor(private actionSheetCtrl: ActionSheetController, private navCtrl: NavController, private userService: UserService) { 
-
+  constructor(private actionSheetCtrl: ActionSheetController, 
+    private navCtrl: NavController, 
+    private userService: UserService) { 
   }
 
   ngOnInit() {
-    this.id=localStorage.getItem('id');
+    const encryptedId=localStorage.getItem('id');
+    this.id=this.userService.decrypt(encryptedId);
     this.getInformation();
   }
 

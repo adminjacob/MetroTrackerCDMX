@@ -23,7 +23,8 @@ export class ProfilePage implements OnInit {
   }
 
   ngOnInit() {
-    this.id=localStorage.getItem('id');
+    const encryptedId=localStorage.getItem('id');
+    this.id=this.userService.decrypt(encryptedId);
     this.getInformation();
   }
 

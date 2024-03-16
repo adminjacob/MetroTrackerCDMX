@@ -35,7 +35,6 @@ export class LoginPage implements OnInit {
     this.viewPassword = !this.viewPassword;
   }
 
-
   reset() {
     this.router.navigate(['forgot']);
   }
@@ -53,14 +52,16 @@ export class LoginPage implements OnInit {
     this.userService.getPasswordByEmail(this.correo).subscribe((result:Result)=> {
       
       const id = result.id; // Obtiene el id del resultado
-      const contrasenaObtenida = result.contrasenia; // Obtiene la contraseña del resultado
-  
+      const encryptedPassword = result.contrasenia; // Obtiene la contraseña encriptada del resultado
+      const decryptedPassword = this.userService.decrypt(encryptedPassword);
+      const encryptedId=this.userService.encrypt(id)
+
       // Guarda el id en las cookies
       localStorage.setItem('intro', 'true');
-      localStorage.setItem('id',id);
+      localStorage.setItem('id',encryptedId);
   
       // Compara la contraseña obtenida con la proporcionada por el usuario
-      if (this.contrasena == contrasenaObtenida) {
+      if (this.contrasena == decryptedPassword) {
         // Si coinciden, navega a la página principal o a donde necesites
         this.navCtrl.navigateRoot(['']);
       } else {

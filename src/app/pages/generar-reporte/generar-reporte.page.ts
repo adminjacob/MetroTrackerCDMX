@@ -5,6 +5,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import { NgForm } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { EstacionesService } from 'src/app/services/estaciones.service';
+import { UserService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -36,10 +37,15 @@ export class GenerarReportePage implements OnInit {
 
   @ViewChild('reportForm') reportForm: NgForm;
 
-  constructor(private navCtrl: NavController, private reportService: ReportService, private actionSheetCtrl: ActionSheetController, private estacionesService:EstacionesService) { }
+  constructor(private navCtrl: NavController, 
+    private reportService: ReportService, 
+    private actionSheetCtrl: ActionSheetController, 
+    private estacionesService:EstacionesService,
+    private userService: UserService) { }
 
   async ngOnInit() {
-    this.id = localStorage.getItem('id');
+    const encryptedId=localStorage.getItem('id');
+    this.id=this.userService.decrypt(encryptedId);
     this.reporte.id_usuario = this.id;
 
     this.estacionesService.obtenerLista().subscribe(async result => {
