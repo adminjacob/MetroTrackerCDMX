@@ -50,15 +50,21 @@ export class LoginPage implements OnInit {
     }
 
     this.userService.getPasswordByEmail(this.correo).subscribe((result:Result)=> {
-      
+
       const id = result.id; // Obtiene el id del resultado
       const encryptedPassword = result.contrasenia; // Obtiene la contraseña encriptada del resultado
       const decryptedPassword = this.userService.decrypt(encryptedPassword);
-      const encryptedId=this.userService.encrypt(id)
+      
+      console.log("a"+encryptedPassword);
+      console.log("b"+decryptedPassword);
+
+      const encryptedId=this.userService.encrypt(id);
 
       // Guarda el id en las cookies
       localStorage.setItem('intro', 'true');
       localStorage.setItem('id',encryptedId);
+
+      
   
       // Compara la contraseña obtenida con la proporcionada por el usuario
       if (this.contrasena == decryptedPassword) {

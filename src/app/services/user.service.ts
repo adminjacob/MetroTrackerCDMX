@@ -15,17 +15,22 @@ export class UserService {
   // Método para desencriptar datos
   decrypt(text: string): string {
     const textParts = text.split(':');
+  
     const iv = CryptoJS.enc.Hex.parse(textParts[0]);
     const encryptedText = textParts[1];
     const cipherParams = CryptoJS.lib.CipherParams.create({
-      ciphertext: CryptoJS.enc.Base64.parse(encryptedText)
+      ciphertext: CryptoJS.enc.Hex.parse(encryptedText) // Cambiado a Hex.parse para ser coherente con el cifrado
     });
+  
     const decrypted = CryptoJS.AES.decrypt(
       cipherParams,
       CryptoJS.enc.Hex.parse(this.key),
       { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
     );
-    return decrypted.toString(CryptoJS.enc.Utf8);
+  
+    const result = decrypted.toString(CryptoJS.enc.Utf8);
+  
+    return result;
   }
 
   // Método para encriptar datos
@@ -36,9 +41,9 @@ export class UserService {
       mode: CryptoJS.mode.CBC,
       padding: CryptoJS.pad.Pkcs7
     });
-
-    // Combina el IV y el texto cifrado para su almacenamiento
-    return iv.toString(CryptoJS.enc.Hex) + ':' + encrypted.toString();
+  
+    // Combina el IV (en hexadecimal) y el texto cifrado (también en hexadecimal) para su almacenamiento
+    return iv.toString(CryptoJS.enc.Hex) + ':' + encrypted.ciphertext.toString(CryptoJS.enc.Hex);
   }
 
 
