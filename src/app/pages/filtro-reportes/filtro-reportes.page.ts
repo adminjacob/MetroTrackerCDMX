@@ -32,6 +32,8 @@ export class FiltroReportesPage implements OnInit {
     sort: '',
     linea: '',
     direccion: '', 
+    fechaInicio: '',
+    fechaFin: ''
   };
 
   constructor(private navCtrl: NavController,
@@ -53,6 +55,7 @@ export class FiltroReportesPage implements OnInit {
 
   onSubmit() {
     this.datosFiltroService.setDatosFiltro(this.filtro);
+
     this.navCtrl.back();
   }
 }

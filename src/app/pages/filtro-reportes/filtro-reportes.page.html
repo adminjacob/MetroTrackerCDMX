@@ -25,7 +25,7 @@
       </ion-radio-group>
 
       <ion-item>
-        <ion-label position="stacked">Seleccione la Línea:</ion-label>
+        <ion-label>Línea:</ion-label>
         <ion-select [(ngModel)]="filtro.linea" interface="action-sheet" name="linea" (ionChange)="onLineaChange($event)">
           <ion-select-option value="Línea 1">Línea 1</ion-select-option>
           <ion-select-option value="Línea 2">Línea 2</ion-select-option>
@@ -43,13 +43,35 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">Dirección:</ion-label>
+        <ion-label>Dirección:</ion-label>
         <ion-select [(ngModel)]="filtro.direccion" interface="action-sheet" name="direccion">
           <ion-select-option *ngFor="let direccion of opcionesDireccionActuales" [value]="direccion">
             {{ direccion }}
           </ion-select-option>
         </ion-select>
       </ion-item>
+
+      <ion-item>
+        <ion-label >Fecha Inicio:</ion-label>
+        <ion-datetime-button datetime="inicioDatetime"></ion-datetime-button>
+      </ion-item>
+      
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime id="inicioDatetime" [(ngModel)]="filtro.fechaInicio" name="fechaInicio" display-format="DD/MMM/YYYY HH:mm"></ion-datetime>
+        </ng-template>
+      </ion-modal>
+
+      <ion-item>
+        <ion-label>Fecha Fin:</ion-label>
+        <ion-datetime-button datetime="finDatetime"></ion-datetime-button>
+      </ion-item>
+
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime id="finDatetime" [(ngModel)]="filtro.fechaFin" name="fechaFin" display-format="DD/MMM/YYYY HH:mm"></ion-datetime>
+        </ng-template>
+      </ion-modal>
 
       <ion-button type="submit" expand="block" fill="outline" class="ion-margin-top">
         Aplicar Filtro

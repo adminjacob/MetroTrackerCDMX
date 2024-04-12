@@ -103,9 +103,18 @@ export class GenerarReportePage implements OnInit {
   
     // Ordenar las estaciones por distancia
     estacionesConDistancia.sort((a, b) => a.distancia - b.distancia);
-  
-    // Retornar las 4 estaciones más cercanas
-    return estacionesConDistancia.slice(0, 4);
+
+    if(estacionesConDistancia[0].estacion==="Pantitlán"){
+      // Retornar las 8 estaciones más cercanas
+      return estacionesConDistancia.slice(0, 8);
+    }else if(estacionesConDistancia[0].estacion==="Tacubaya"){
+      // Retornar las 6 estaciones más cercanas
+      return estacionesConDistancia.slice(0, 6)
+    }else{
+      // Retornar las 4 estaciones más cercanas
+      return estacionesConDistancia.slice(0, 4)
+    }  
+    
   }
 
   filtrarEstaciones(texto: string) {
