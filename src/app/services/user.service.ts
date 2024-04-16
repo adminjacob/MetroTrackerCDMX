@@ -72,9 +72,19 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
+  // Actualizar la contraseña
+  updatePassword(email: string, contrasenia: string) {
+    return this.http.put(`${this.apiUrl}/update-password`, { email, contrasenia });
+  }
+
   // Actualizar un usuario
   updateUser(id: string, user: any) {
     return this.http.put(`${this.apiUrl}/${id}`, user);
+  }
+
+  //Mandar codigo de verificacion
+  sendCode(correo:string){
+    return this.http.post(`${this.apiUrl}/send-code`, {correo});
   }
 
   // Actualizar la foto de perfil de un usuario

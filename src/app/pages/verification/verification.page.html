@@ -10,15 +10,17 @@
 
 <ion-content class="ion-padding">
   <h2 class="head-title">Verificación</h2>
-  <p class="sub-title">Ingresa el codigo de 5 digitos que acabamos de enviar a tu correo</p>
-  <div class="otp-content"> 
-    <ng-otp-input
-      [config]="{length:5,inputStyles:{'border-radius':'0px','width': '40px','height': '40px','border':'none','border-bottom':'2px solid lightgray','background-color':'white'}}">
-    </ng-otp-input>
-  </div>
+  <p class="sub-title">Ingresa el código de 5 dígitos que acabamos de enviar a tu correo</p>
+  <form (ngSubmit)="onContinue()">
+    <div class="otp-content"> 
+      <ng-otp-input
+        [config]="otpConfig"
+        (onInputChange)="onOtpChange($event)">
+      </ng-otp-input>
+    </div>
 
-  <ion-button (click)="onContinue()" expand="block" shape="round" class="login-btn">
-    Continuar
-  </ion-button>
-
+    <ion-button type="submit" expand="block" shape="round" class="login-btn" [disabled]="otp.length !== 5">
+      Continuar
+    </ion-button>
+  </form>
 </ion-content>

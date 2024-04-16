@@ -63,8 +63,6 @@ export class LoginPage implements OnInit {
       // Guarda el id en las cookies
       localStorage.setItem('intro', 'true');
       localStorage.setItem('id',encryptedId);
-
-      
   
       // Compara la contraseña obtenida con la proporcionada por el usuario
       if (this.contrasena == decryptedPassword) {

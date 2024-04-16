@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras  } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-forgot',
@@ -9,9 +10,13 @@ import { NavController } from '@ionic/angular';
 })
 export class ForgotPage implements OnInit {
 
+  email: string = '';
+  submitAttempted = false;
+
   constructor(
     private navCtrl: NavController,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -21,7 +26,30 @@ export class ForgotPage implements OnInit {
     this.navCtrl.back();
   }
 
-  onSend() {
-    this.router.navigate(['verification']);
+  onSend(form: any) {
+
+    this.submitAttempted = true;
+    
+    if (form.valid) {
+      this.userService.sendCode(this.email).subscribe((result:any)=>{
+
+          if(result=='Error al enviar el correo'){
+            alert('Ocurrio un error al enviar el correo, favor de intentarlo de nuevo.');
+          }else if(result=='Usuario no encontrado'){
+            alert('No se encontro el usuario');
+          }else{
+            const codigo=result.code;
+            // Crear NavigationExtras para pasar el código a la página de verificación
+            const navigationExtras: NavigationExtras = {
+              state: {
+                verificationCode: codigo,
+                email: this.email
+             }
+            };
+
+            this.router.navigate(['verification'], navigationExtras);
+          }
+      });   
+    } 
   }
 }

@@ -12,14 +12,23 @@
   <h2 class="head-title">¿Olvidaste tu contraseña?</h2>
   <p class="sub-title">Por favor ingresa tu correo para que te podamos ayudar a recuperar tu contraseña</p>
 
-  <ion-item style="margin-top: 50px;">
-    <ion-label position="stacked">Correo</ion-label>
-    <ion-input type="email" ></ion-input>
-  </ion-item>
+  <div class="bottom-content">
+    <form #resetForm="ngForm" (ngSubmit)="onSend(resetForm)">
+      <ion-item>
+        <div class="input_box">
+          <ion-input type="email" [(ngModel)]="email" name="email" #emailRef="ngModel" required email placeholder="Correo"></ion-input>
+        </div>
+      </ion-item>
+      <ion-button type="submit" expand="block" shape="round" class="login-btn">
+        Enviar codigo
+      </ion-button>
+    </form>
 
-
-  <ion-button (click)="onSend()" expand="block" shape="round" class="login-btn">
-    Enviar
-  </ion-button>
-
+    <div *ngIf="submitAttempted && emailRef.errors?.['required']" class="error-message">
+      El correo es requerido.
+    </div>
+    <div *ngIf="submitAttempted && emailRef.errors?.['email']" class="error-message">
+      Por favor introduce un correo válido.
+    </div>
+  </div>
 </ion-content>
