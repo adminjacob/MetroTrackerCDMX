@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TiemposService } from 'src/app/services/tiempos.service';
 import { TweetsService } from 'src/app/services/tweets.service';
 
 @Component({
@@ -12,14 +13,12 @@ export class AvancePage implements OnInit {
   ultimoTiempoActualizacion = new Date();
   tweets:any=[];
 
-  constructor(private tweetService:TweetsService) { }
+  constructor(private tweetService:TweetsService,
+              private tiemposService: TiemposService
+  ) { }
 
   ngOnInit() {
     this.actualizarDatos();
-    this.tweetService.obtenerTweets().subscribe(result=>{
-      this.tweets=result;
-      console.log(result);
-    });
   }
 
   public segment: string = 'avance';
@@ -40,8 +39,27 @@ export class AvancePage implements OnInit {
   ];
 
   actualizarDatos() {
-    // Lógica para actualizar los datos
-    this.ultimoTiempoActualizacion = new Date(); // Actualiza la hora de la última actualización
+    this.tweetService.obtenerTweets().subscribe(result=>{
+      this.tweets=result;
+    });
+
+    this.tiemposService.obtenerTiempo().subscribe((result:any)=>{
+      console.log(result);
+      this.ultimoTiempoActualizacion=result.fechaHoraRegistro;
+
+      this.lineas[0].tiempo=result.tiempos.linea_1;
+      this.lineas[1].tiempo=result.tiempos.linea_2;
+      this.lineas[2].tiempo=result.tiempos.linea_3;
+      this.lineas[3].tiempo=result.tiempos.linea_4;
+      this.lineas[4].tiempo=result.tiempos.linea_5;
+      this.lineas[5].tiempo=result.tiempos.linea_6;
+      this.lineas[6].tiempo=result.tiempos.linea_7;
+      this.lineas[7].tiempo=result.tiempos.linea_8;
+      this.lineas[8].tiempo=result.tiempos.linea_9;
+      this.lineas[9].tiempo=result.tiempos.linea_A;
+      this.lineas[10].tiempo=result.tiempos.linea_B;
+      this.lineas[11].tiempo=result.tiempos.linea_12;
+    });
   }
 
 }
