@@ -42,20 +42,28 @@ export class ConfirmPasswordPage implements OnInit {
     this.navCtrl.back();
   }
 
-  async onConfirm() {
+  onConfirm() {
     if (this.newPassword === this.confirmPassword) {
-
-      console.log(this.newPassword);
 
       this.userService.updatePassword(this.email,this.newPassword).subscribe((result:any)=>{
         if(result==='Contraseña actualizada correctamente'){
-          
+          this.onConfirm2();
         }
       });
 
     } else {
       alert('Las contraseñas no coinciden');
     }
+  }
+
+  async onConfirm2(){
+    const modal = await this.modalController.create({
+      component: PasswordChangedPage,
+      cssClass: 'successModal',
+    });
+
+    await modal.present();
+    this.navCtrl.navigateRoot(['login']);
   }
 
   

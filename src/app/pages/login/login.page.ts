@@ -55,9 +55,6 @@ export class LoginPage implements OnInit {
       const encryptedPassword = result.contrasenia; // Obtiene la contraseña encriptada del resultado
       const decryptedPassword = this.userService.decrypt(encryptedPassword);
       
-      console.log("a"+encryptedPassword);
-      console.log("b"+decryptedPassword);
-
       const encryptedId=this.userService.encrypt(id);
 
       // Guarda el id en las cookies

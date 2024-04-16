@@ -30,7 +30,7 @@ export class AdministradorReportesPage implements OnInit {
       .subscribe((event: NavigationEnd) => {
         if(this.previousUrl && event.url === '/administrador-tabs/administrador-reportes' && this.previousUrl === '/filtro-reportes') {
           // La lógica que se ejecutara solo cuando vengamos de /filtro-reportes
-          console.log(event.url);
+          //console.log(event.url);
           this.filtro = this.datosFiltroService.getDatosFiltro();
           console.log(this.filtro);
           this.cargarReportes(this.filtro);
@@ -52,7 +52,7 @@ export class AdministradorReportesPage implements OnInit {
   
     this.reporteService.obtenerReportes(query).subscribe(async result => {
       this.reportes = result;
-      console.log(this.reportes);
+      //console.log(this.reportes);
       await loading.dismiss();
     }, async error => {
       console.error('Error al cargar los reportes: ', error);
@@ -127,6 +127,7 @@ export class AdministradorReportesPage implements OnInit {
   eliminarReporte(reporte) {
 
     this.reporteService.deleteReport(reporte.id).subscribe(result=>{
+      
       if(result==="Reporte eliminado con éxito."){
         this.reportes = this.reportes.filter(r => r !== reporte);
       }else{

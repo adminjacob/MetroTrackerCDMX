@@ -29,7 +29,7 @@ export class ComunidadPage implements OnInit {
         if(this.previousUrl && event.url === '/tabs/tab3' && this.previousUrl === '/filtro-reportes') {
           // La lógica que se ejecutara solo cuando vengamos de /filtro-reportes
           this.filtro = this.datosFiltroService.getDatosFiltro();
-          console.log(this.filtro);
+          //console.log(this.filtro);
           this.cargarReportes(this.filtro);
         }
         // Actualiza la URL anterior después de toda la lógica para no sobrescribir con la actual prematuramente

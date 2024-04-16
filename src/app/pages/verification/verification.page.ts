@@ -33,7 +33,6 @@ export class VerificationPage implements OnInit {
     const navigation = this.router.getCurrentNavigation();
     this.verificationCode = navigation?.extras.state?.verificationCode;
     this.email=navigation?.extras.state?.email;
-    console.log(this.email);
   }
 
 

@@ -44,7 +44,7 @@ export class AvancePage implements OnInit {
     });
 
     this.tiemposService.obtenerTiempo().subscribe((result:any)=>{
-      console.log(result);
+    
       this.ultimoTiempoActualizacion=result.fechaHoraRegistro;
 
       this.lineas[0].tiempo=result.tiempos.linea_1;
