@@ -13,7 +13,8 @@
     <ion-list>
       <ion-item>
         <ion-label position="stacked">Nombre del Reporte</ion-label>
-        <ion-select [(ngModel)]="reporte.titulo" interface="action-sheet" name="titulo" #tituloRef="ngModel" required>
+        <ion-select [(ngModel)]="reporte.titulo" interface="action-sheet" name="titulo" #tituloRef="ngModel" required (ionChange)="mostrarAnuncio()">
+          <ion-select-option value="Cantidad de gente en andenes">Cantidad de gente en andenes</ion-select-option>
           <ion-select-option value="Ocurrió un accidente">Ocurrió un accidente</ion-select-option>
           <ion-select-option value="La marcha es lenta">La marcha es lenta</ion-select-option>
           <ion-select-option value="El tren ha tardado más de X minutos en pasar">El tren ha tardado más de X minutos en pasar</ion-select-option>
@@ -23,7 +24,6 @@
           <ion-select-option value="Trenes detenidos">Trenes detenidos</ion-select-option>
           <ion-select-option value="Problemas estructurales">Problemas estructurales</ion-select-option>
           <ion-select-option value="Estaciones fuera de servicio">Estaciones fuera de servicio</ion-select-option>
-          <ion-select-option value="Cantidad de gente en andenes">Cantidad de gente en andenes</ion-select-option>
           <ion-select-option value="Funcionamiento del Wi-Fi">Funcionamiento del Wi-Fi</ion-select-option>
           <ion-select-option value="Otro">Otro</ion-select-option>
         </ion-select>
@@ -61,7 +61,7 @@
   
       <ion-button expand="block" fill="outline" (click)="getImage()">
         <ion-icon slot="start" name="image"></ion-icon>
-        Tomar Fotografia
+        Tomar Fotografía
       </ion-button>
 
     </ion-list>
@@ -72,8 +72,6 @@
 
   </form>
 
-  
-
   <!-- Mensajes de error -->
   <div *ngIf="submitAttempted && tituloRef.errors?.['required']" class="error-message">
     Se requiere seleccionar el nombre del reporte.
@@ -81,4 +79,5 @@
   <div *ngIf="submitAttempted && estacionSeleccionadaRef.errors?.['required']" class="error-message">
     Se requiere seleccionar una estación.
   </div>
+
 </ion-content>

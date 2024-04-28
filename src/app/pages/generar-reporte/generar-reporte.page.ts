@@ -6,6 +6,7 @@ import { NgForm } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { EstacionesService } from 'src/app/services/estaciones.service';
 import { UserService } from 'src/app/services/user.service';
+import { PredictionService } from 'src/app/services/predict.service';
 
 
 @Component({
@@ -35,13 +36,23 @@ export class GenerarReportePage implements OnInit {
 
   submitAttempted = false;
 
+  photoTaken = false;
+
+  mostrarAnuncio(){
+    if(this.reporte.titulo === 'Cantidad de gente en andenes'){
+      alert('La foto que debes de subir debe de contar con las siguientes caracteristicas');
+    }
+  }
+
   @ViewChild('reportForm') reportForm: NgForm;
 
   constructor(private navCtrl: NavController, 
     private reportService: ReportService, 
     private actionSheetCtrl: ActionSheetController, 
     private estacionesService:EstacionesService,
-    private userService: UserService) { }
+    private userService: UserService,
+    private predictionService: PredictionService
+  ) { }
 
   async ngOnInit() {
     const encryptedId=localStorage.getItem('id');
@@ -194,6 +205,8 @@ export class GenerarReportePage implements OnInit {
 
       // Ahora se asigna este archivo a una variable
       this.selectedFile = file;
+
+      this.photoTaken = true;
     
     });
   
@@ -209,6 +222,12 @@ export class GenerarReportePage implements OnInit {
       return; // Detener la ejecución si el formulario no es válido
     }
 
+    if(this.reporte.titulo === 'Cantidad de gente en andenes' && this.photoTaken==false){
+      alert('Cuando se selecciona Cantidad de gente en andenes, es necesario subir una fotografia');
+      return; // Detener la ejecución si el formulario no es válido
+    }
+
+    //Crear reporte
     const formData = new FormData();
     formData.append('descripcion', this.reporte.descripcion);
     formData.append('id_usuario', this.reporte.id_usuario);
@@ -228,6 +247,33 @@ export class GenerarReportePage implements OnInit {
         alert("Ocurrio un error al generar el reporte");
       }
     })
+
+    if(this.reporte.titulo === 'Cantidad de gente en andenes'){
+      this.sendPrediction(this.reporte.linea,this.reporte.estacion,this.reporte.direccion,this.selectedFile);
+    }
+
+  }
+
+  sendPrediction(linea: string, estacion: string, direccion: string, imagen: File){
+
+    //Crear reporte
+    const formData = new FormData();
+    formData.append('linea', this.reporte.linea);
+    formData.append('estacion', this.reporte.estacion);
+    formData.append('direccion', this.reporte.direccion);
+    // Agregar la imagen si está presente
+    if (this.selectedFile) {
+      formData.append('imagen', this.selectedFile, this.selectedFile.name);
+    }
+
+    this.predictionService.sendPrediction(formData).subscribe(result=>{
+      if(result==="Prediccion enviada de forma exitosa"){
+        console.log("Prediccion enviada de forma exitosa");
+      }else{
+        console.log("Ocurrio un error al mandar la prediccion");
+      }
+    })
+
   }
 
 }
