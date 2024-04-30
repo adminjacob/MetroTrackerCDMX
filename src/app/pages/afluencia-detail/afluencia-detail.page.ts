@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AfluenciaService } from 'src/app/services/afluencia.service';
 
 @Component({
   selector: 'app-afluencia-detail',
@@ -11,6 +12,8 @@ export class AfluenciaDetailPage implements OnInit {
   linea: string = "1";
   segment: string = '';  // Valor inicial
   ultimoTiempoActualizacion = new Date();
+
+  afluencias: any = [];
 
   estacionesPantitlan = [
     { nombre: 'Observatorio', imagen: 'https://www.metro.cdmx.gob.mx/storage/app/media/lared/linea1/observatorio.png', afluencia: 25 },
@@ -58,12 +61,25 @@ export class AfluenciaDetailPage implements OnInit {
     { nombre: 'Observatorio', imagen: 'https://www.metro.cdmx.gob.mx/storage/app/media/lared/linea1/observatorio.png', afluencia: 25 }
   ];
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private afluenciaService: AfluenciaService) { }
 
   ngOnInit() {
     this.segment = this.route.snapshot.queryParamMap.get('direccion');
     console.log(this.segment);
     this.actualizarDatos();
+
+    this.cargarAfluencias('Línea 1', 'Observatorio');
+  }
+
+  cargarAfluencias(linea: string, direccion: string) {
+    this.afluenciaService.getAfluencias(linea, direccion).subscribe({
+      next: (data) => {
+        this.afluencias = data;
+      },
+      error: (error) => {
+        console.error('Hubo un error al obtener las afluencias:', error);
+      }
+    });
   }
 
   //Configuracion detallada
