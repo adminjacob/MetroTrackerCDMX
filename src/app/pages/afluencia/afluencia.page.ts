@@ -26,10 +26,10 @@ export class AfluenciaPage implements OnInit {
     { texto: 'Línea A', imagen: 'LineaA.png', direccion1: 'Pantitlán', direccion2: 'La Paz' },
     { texto: 'Línea B', imagen: 'LineaB.png', direccion1: 'Buenavista', direccion2: 'Ciudad Azteca' },
     { texto: 'Línea 12', imagen: 'Linea12.png', direccion1: 'Mixcoac', direccion2: 'Tláhuac' }
-];
+  ];
 
-  goToDetail(direccion: string) {
-    // Aquí se puede enviar información a la página de detalle usando queryParams o algún otro método que prefieras.
-    this.router.navigate(['/afluencia-detail'], { queryParams: { direccion: direccion } });
+  goToDetail(linea: string, direccion: string) {
+    this.router.navigate(['/afluencia-detail'], { queryParams: { linea: linea, direccion: direccion } });
   }
+  
 }

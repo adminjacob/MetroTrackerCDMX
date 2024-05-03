@@ -11,8 +11,8 @@
         <img [src]="'../../../assets/imgs/lineas/'+item.imagen">
       </ion-thumbnail>
       <ion-label class="ion-text-wrap">
-        <h2 (click)="goToDetail(item.direccion1)">{{ item.direccion1 }}</h2>
-        <h2 (click)="goToDetail(item.direccion2)">{{ item.direccion2 }}</h2>
+        <h2 (click)="goToDetail(item.texto, item.direccion1)">{{ item.direccion1 }}</h2>
+        <h2 (click)="goToDetail(item.texto, item.direccion2)">{{ item.direccion2 }}</h2>
       </ion-label>
     </ion-item>
   </ion-list>

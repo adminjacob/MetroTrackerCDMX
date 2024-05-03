@@ -12,7 +12,7 @@ export class AfluenciaService {
 
   //Obtiene la lista de afluencias
   getAfluencias(linea: string, direccion: string) {
-    return this.http.get(`${this.apiUrl}/afluencias/${linea}/${direccion}`);
+    return this.http.post(`${this.apiUrl}/afluencias`, { linea, direccion });
   }
   
 }

@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
     </ion-buttons>
-    <ion-title>Direccion {{ segment }}</ion-title>
+    <ion-title>Direccion {{ direccion }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="toggleConfigMode()">
         <ion-icon name="settings-outline"></ion-icon>
@@ -23,22 +23,10 @@
 <ion-content>
     <!-- Configuración Detallada -->
   <ng-container *ngIf="configMode === 'detallada'">
-    <ion-list *ngIf="segment === 'Observatorio'">
-      <ion-item *ngFor="let estacion of estacionesObservatorio">
+    <ion-list>
+      <ion-item *ngFor="let estacion of afluencias">
         <ion-thumbnail slot="start">
-          <img [src]="estacion.imagen">
-        </ion-thumbnail>
-        <div class="progress-container" [ngClass]="getProgressBarClass(estacion.afluencia)">
-          <ion-progress-bar [value]="estacion.afluencia/100" [ngClass]="getProgressBarClass(estacion.afluencia)"></ion-progress-bar>
-          <div class="progress-label">{{ getProgressLabel(estacion.afluencia) }} ({{ estacion.afluencia }}%)</div>
-        </div>
-      </ion-item>
-    </ion-list>
-    
-    <ion-list *ngIf="segment === 'Pantitlán'">
-      <ion-item *ngFor="let estacion of estacionesPantitlan">
-        <ion-thumbnail slot="start">
-          <img [src]="estacion.imagen">
+          <img [src]="estacion.icono">
         </ion-thumbnail>
         <div class="progress-container" [ngClass]="getProgressBarClass(estacion.afluencia)">
           <ion-progress-bar [value]="estacion.afluencia/100" [ngClass]="getProgressBarClass(estacion.afluencia)"></ion-progress-bar>
@@ -49,20 +37,10 @@
   </ng-container>
 
   <ng-container *ngIf="configMode === 'basica'">
-    <ion-list *ngIf="segment === 'Observatorio'">
-      <ion-item *ngFor="let estacion of estacionesObservatorio">
+    <ion-list>
+      <ion-item *ngFor="let estacion of afluencias">
         <ion-thumbnail slot="start">
-          <img [src]="estacion.imagen">
-        </ion-thumbnail>
-        <div [ngClass]="getSemaforoColor(estacion.afluencia)" class="semaforo">
-        </div>
-      </ion-item>
-    </ion-list>
-
-    <ion-list *ngIf="segment === 'Pantitlán'">
-      <ion-item *ngFor="let estacion of estacionesPantitlan">
-        <ion-thumbnail slot="start">
-          <img [src]="estacion.imagen">
+          <img [src]="estacion.icono">
         </ion-thumbnail>
         <div [ngClass]="getSemaforoColor(estacion.afluencia)" class="semaforo">
         </div>
