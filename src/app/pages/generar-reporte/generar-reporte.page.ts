@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActionSheetController, NavController } from '@ionic/angular';
+import { ActionSheetController, AlertController, NavController } from '@ionic/angular';
 import { ReportService } from 'src/app/services/report.service';
 import { Geolocation } from '@capacitor/geolocation';
 import { NgForm } from '@angular/forms';
@@ -38,11 +38,6 @@ export class GenerarReportePage implements OnInit {
 
   photoTaken = false;
 
-  mostrarAnuncio(){
-    if(this.reporte.titulo === 'Cantidad de gente en andenes'){
-      alert('La foto que debes de subir debe de contar con las siguientes caracteristicas');
-    }
-  }
 
   @ViewChild('reportForm') reportForm: NgForm;
 
@@ -51,7 +46,8 @@ export class GenerarReportePage implements OnInit {
     private actionSheetCtrl: ActionSheetController, 
     private estacionesService:EstacionesService,
     private userService: UserService,
-    private predictionService: PredictionService
+    private predictionService: PredictionService,
+    public alertController: AlertController
   ) { }
 
   async ngOnInit() {
@@ -70,7 +66,31 @@ export class GenerarReportePage implements OnInit {
         // Ahora esta línea se ejecuta después de que los datos están disponibles
         this.estacionesCercanas = await this.encontrarEstacionesMasCercanas(this.estaciones);
     });
-}
+  }
+
+  async mostrarAnuncio() {
+
+    if(this.reporte.titulo === 'Cantidad de gente en andenes'){
+      const alert = await this.alertController.create({
+        header: 'Instrucciones para Capturar la Foto',
+        subHeader: 'Importante para el análisis correcto:',
+        message: `Para asegurar que la imagen pueda ser procesada adecuadamente, sigue estas indicaciones y revisa el ejemplo abajo:
+                  <ul>
+                    <li><b>Ángulo:</b> La foto debe ser tomada perpendicular al andén para capturar la mayor cantidad posible de personas visibles.</li>
+                    <li><b>Iluminación:</b> Asegúrate de que el área esté bien iluminada. Evita contraluces o áreas con sombras marcadas.</li>
+                    <li><b>Altura:</b> La cámara debe estar a una altura aproximada de 2 metros. Evita tomar fotos desde ángulos muy elevados o bajos.</li>
+                    <li><b>Calidad de la imagen:</b> Utiliza la máxima resolución disponible en tu dispositivo para garantizar detalles claros.</li>
+                  </ul>
+                  <img src="assets/ejemplo.jpg" style="width:100%; height: auto;">`,
+        buttons: ['Entendido'],
+      });
+
+      alert.style.cssText = '--width: 90vw; --max-width: 500px;';
+  
+      await alert.present();
+    }
+    
+  }
 
   async checkPermissions() {
     const hasPermission = await Geolocation.checkPermissions();

@@ -76,34 +76,65 @@ export class ComunidadPage implements OnInit {
   }
 
   likeReporte(reportId: string) {
-    this.reporteService.likeReporte(reportId, this.idUser).subscribe(result => {
-      if (result === "Like agregado correctamente.") {
-        this.actualizarReporte(reportId, true);
-      }
+    this.reporteService.likeReporte(reportId, this.idUser).subscribe((result:any) => {
+      console.log(result);
+      this.actualizarEstadoReporte(reportId, true, result.includes("agregado"));
     });
   }
-
+  
   dislikeReporte(reportId: string) {
-    this.reporteService.dislikeReporte(reportId, this.idUser).subscribe(result => {
-      if (result === "Dislike agregado correctamente.") {
-        this.actualizarReporte(reportId, false);
-      }
+    this.reporteService.dislikeReporte(reportId, this.idUser).subscribe((result:any) => {
+      console.log(result);
+      this.actualizarEstadoReporte(reportId, false, result.includes("agregado"));
     });
   }
-
-  actualizarReporte(reportId: string, liked: boolean) {
+  
+  actualizarEstadoReporte(reportId: string, liked: boolean, added: boolean) {
     const reportIndex = this.reportes.findIndex(r => r.id === reportId);
     if (reportIndex !== -1) {
-      // Actualizar likes o dislikes basado en la respuesta
-      if (liked) {
-        this.reportes[reportIndex].likes++;
-        this.reportes[reportIndex].usuariosQueDieronLike.push(this.idUser);
-      } else {
-        this.reportes[reportIndex].dislikes++;
-        this.reportes[reportIndex].usuariosQueDieronDislike.push(this.idUser);
-      }
+        const report = this.reportes[reportIndex];
+        
+        if (liked) {
+            // Si se está añadiendo un like
+            if (added) {
+                // Añadir like
+                report.likes++;
+                report.usuariosQueDieronLike.push(this.idUser);
+                // Verificar si existía un dislike previo y removerlo
+                if (report.usuariosQueDieronDislike.includes(this.idUser)) {
+                    report.dislikes--;
+                    report.usuariosQueDieronDislike = report.usuariosQueDieronDislike.filter(id => id !== this.idUser);
+                }
+            } else {
+                // Remover like
+                report.likes--;
+                report.usuariosQueDieronLike = report.usuariosQueDieronLike.filter(id => id !== this.idUser);
+            }
+        } else {
+            // Si se está añadiendo un dislike
+            if (added) {
+                // Añadir dislike
+                report.dislikes++;
+                report.usuariosQueDieronDislike.push(this.idUser);
+                // Verificar si existía un like previo y removerlo
+                if (report.usuariosQueDieronLike.includes(this.idUser)) {
+                    report.likes--;
+                    report.usuariosQueDieronLike = report.usuariosQueDieronLike.filter(id => id !== this.idUser);
+                }
+            } else {
+                // Remover dislike
+                report.dislikes--;
+                report.usuariosQueDieronDislike = report.usuariosQueDieronDislike.filter(id => id !== this.idUser);
+            }
+        }
+        // Reasignar el objeto modificado al array para actualizar la vista
+        this.reportes = [
+            ...this.reportes.slice(0, reportIndex),
+            report,
+            ...this.reportes.slice(reportIndex + 1)
+        ];
     }
-  }
+}
 
   usuarioHaDadoLike(reportId: string): boolean {
     const reporte = this.reportes.find(r => r.id === reportId);
