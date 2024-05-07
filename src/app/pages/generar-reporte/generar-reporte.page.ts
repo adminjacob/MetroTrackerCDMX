@@ -276,21 +276,21 @@ export class GenerarReportePage implements OnInit {
 
   sendPrediction(linea: string, estacion: string, direccion: string, imagen: File){
 
-    //Crear reporte
-    const formData = new FormData();
-    formData.append('linea', this.reporte.linea);
-    formData.append('estacion', this.reporte.estacion);
-    formData.append('direccion', this.reporte.direccion);
+    // Crear reporte
+    const formData2 = new FormData();
+    formData2.append('line', linea);
+    formData2.append('station', estacion);
+    formData2.append('direction', direccion);
     // Agregar la imagen si está presente
-    if (this.selectedFile) {
-      formData.append('imagen', this.selectedFile, this.selectedFile.name);
+    if (imagen) {
+      formData2.append('file', imagen, imagen.name);
     }
 
-    this.predictionService.sendPrediction(formData).subscribe(result=>{
-      if(result==="Prediccion enviada de forma exitosa"){
-        console.log("Prediccion enviada de forma exitosa");
+    this.predictionService.sendPrediction(formData2).subscribe(result=>{
+      if(result.message==="Predicción guardada de forma correcta"){
+        alert("Predicción guardada de forma correcta");
       }else{
-        console.log("Ocurrio un error al mandar la prediccion");
+        alert("Ocurrio un error al guardar la prediccion");
       }
     })
 
