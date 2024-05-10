@@ -1,0 +1,7 @@
+.texto-transparente::part(native) {
+    color: transparent; /* Hace el texto transparente */
+  }
+  
+  ion-datetime-button::part(native) {
+    color: black; 
+  }

@@ -33,8 +33,8 @@ export class AfluenciaDetailPage implements OnInit {
   cargarAfluencias(linea: string, direccion: string) {
     this.afluenciaService.getAfluencias(linea, direccion).subscribe({
       next: (data) => {
-        this.afluencias = data; // Asegúrate de asignar los datos recibidos a la propiedad 'afluencias'
-        console.log(this.afluencias);
+        this.afluencias = data;
+        //console.log(this.afluencias);
       },
       error: (error) => {
         console.error('Hubo un error al obtener las afluencias:', error);

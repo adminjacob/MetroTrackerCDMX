@@ -15,12 +15,16 @@
       </ion-list-header>
       <ion-radio-group [(ngModel)]="filtro.sort" name="votos">
         <ion-item>
-          <ion-label>Más Votados</ion-label>
-          <ion-radio slot="start" value="masVotados"></ion-radio>
+          <ion-label>Con mas likes</ion-label>
+          <ion-radio slot="start" value="masLikes"></ion-radio>
         </ion-item>
         <ion-item>
-          <ion-label>Menos Votados</ion-label>
-          <ion-radio slot="start" value="menosVotados"></ion-radio>
+          <ion-label>Con mas dislikes</ion-label>
+          <ion-radio slot="start" value="masDislikes"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Con mas interacciones</ion-label>
+          <ion-radio slot="start" value="masInteracciones"></ion-radio>
         </ion-item>
       </ion-radio-group>
 
@@ -53,23 +57,37 @@
 
       <ion-item>
         <ion-label >Fecha Inicio:</ion-label>
-        <ion-datetime-button datetime="inicioDatetime"></ion-datetime-button>
+        <ion-datetime-button datetime="inicioDatetime" [ngClass]="{'texto-transparente': !fechaSeleccionada}">
+        </ion-datetime-button>
       </ion-item>
       
       <ion-modal [keepContentsMounted]="true">
         <ng-template>
-          <ion-datetime id="inicioDatetime" [(ngModel)]="filtro.fechaInicio" name="fechaInicio" display-format="DD/MMM/YYYY HH:mm"></ion-datetime>
+          <ion-datetime #datetimePicker
+              id="inicioDatetime"
+              [(ngModel)]="filtro.fechaInicio"
+              name="fechaInicio"
+              display-format="DD/MMM/YYYY HH:mm"
+              (ionChange)="actualizarFechaSeleccionada()">
+          </ion-datetime>
         </ng-template>
       </ion-modal>
 
       <ion-item>
         <ion-label>Fecha Fin:</ion-label>
-        <ion-datetime-button datetime="finDatetime"></ion-datetime-button>
+        <ion-datetime-button datetime="finDatetime" [ngClass]="{'texto-transparente': !fechaSeleccionada2}">
+      </ion-datetime-button>
       </ion-item>
 
       <ion-modal [keepContentsMounted]="true">
         <ng-template>
-          <ion-datetime id="finDatetime" [(ngModel)]="filtro.fechaFin" name="fechaFin" display-format="DD/MMM/YYYY HH:mm"></ion-datetime>
+          <ion-datetime #datetimePicker
+              id="finDatetime"
+              [(ngModel)]="filtro.fechaFin"
+              name="fechaFin"
+              display-format="DD/MMM/YYYY HH:mm"
+              (ionChange)="actualizarFechaSeleccionada2()">
+          </ion-datetime>
         </ng-template>
       </ion-modal>
 

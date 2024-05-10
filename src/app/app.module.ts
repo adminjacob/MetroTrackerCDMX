@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { PasswordChangedPageModule } from './pages/password-changed/password-changed.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FullScreenImageComponent } from './components/full-screen-image/full-screen-image.component';
+import { SwiperModule } from 'swiper/angular';
 
 @NgModule({
     declarations: [AppComponent, FullScreenImageComponent],
@@ -15,7 +16,8 @@ import { FullScreenImageComponent } from './components/full-screen-image/full-sc
         IonicModule.forRoot(),
         AppRoutingModule,
         PasswordChangedPageModule,
-        HttpClientModule
+        HttpClientModule,
+        SwiperModule 
     ],
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
     bootstrap: [AppComponent]

@@ -26,20 +26,36 @@ export class ComunidadPage implements OnInit {
       this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        if(this.previousUrl && event.url === '/tabs/tab3' && this.previousUrl === '/filtro-reportes') {
-          // La lógica que se ejecutara solo cuando vengamos de /filtro-reportes
-          this.filtro = this.datosFiltroService.getDatosFiltro();
-          //console.log(this.filtro);
-          this.cargarReportes(this.filtro);
-        }
-        // Actualiza la URL anterior después de toda la lógica para no sobrescribir con la actual prematuramente
-        this.previousUrl = event.url;
+        this.handleNavigation(event.url);
       });
+
+    this.datosFiltroService.isFiltroAplicado().subscribe(aplicado => {
+      if (aplicado) {
+        this.cargarReportes(this.datosFiltroService.getDatosFiltro());
+        this.datosFiltroService.resetFiltroAplicado();
+      }
+    });
+  }
+
+  handleNavigation(url: string) {
+    // Actualiza la URL anterior después de toda la lógica para no sobrescribir con la actual prematuramente
+    if(this.previousUrl && url === '/tabs/tab3' && this.previousUrl === '/filtro-reportes') {
+    
+    }
+    this.previousUrl = url;
   }
 
   ngOnInit() {
     this.idUser = localStorage.getItem('id') || '';
     this.cargarReportes();
+
+    // Escuchar cuando se genera un nuevo reporte
+    this.datosFiltroService.reporteGenerado$.subscribe(generado => {
+      if (generado) {
+        this.cargarReportes();  // Recargar los reportes si se ha generado uno nuevo
+        this.datosFiltroService.resetReporteGenerado();  // Resetear el indicador
+      }
+    });
   }
 
   async cargarReportes(query = {}) {
@@ -77,14 +93,14 @@ export class ComunidadPage implements OnInit {
 
   likeReporte(reportId: string) {
     this.reporteService.likeReporte(reportId, this.idUser).subscribe((result:any) => {
-      console.log(result);
+      //console.log(result);
       this.actualizarEstadoReporte(reportId, true, result.includes("agregado"));
     });
   }
   
   dislikeReporte(reportId: string) {
     this.reporteService.dislikeReporte(reportId, this.idUser).subscribe((result:any) => {
-      console.log(result);
+      //console.log(result);
       this.actualizarEstadoReporte(reportId, false, result.includes("agregado"));
     });
   }

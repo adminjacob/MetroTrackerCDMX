@@ -7,6 +7,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { EstacionesService } from 'src/app/services/estaciones.service';
 import { UserService } from 'src/app/services/user.service';
 import { PredictionService } from 'src/app/services/predict.service';
+import { DatosFiltroService } from 'src/app/services/datos-filtro.service';
 
 
 @Component({
@@ -47,7 +48,8 @@ export class GenerarReportePage implements OnInit {
     private estacionesService:EstacionesService,
     private userService: UserService,
     private predictionService: PredictionService,
-    public alertController: AlertController
+    public alertController: AlertController,
+    private datosFiltroService: DatosFiltroService
   ) { }
 
   async ngOnInit() {
@@ -232,22 +234,21 @@ export class GenerarReportePage implements OnInit {
   
   }
 
-  submitReport(){
-
+  async submitReport() {
     this.submitAttempted = true;
 
     // Verificar si el formulario es válido
     if (!this.reportForm.valid) {
-      console.log('Formulario no válido, no se puede avanzar.');
-      return; // Detener la ejecución si el formulario no es válido
+        console.log('Formulario no válido, no se puede avanzar.');
+        return; // Detener la ejecución si el formulario no es válido
     }
 
     if(this.reporte.titulo === 'Cantidad de gente en andenes' && this.photoTaken==false){
-      alert('Cuando se selecciona Cantidad de gente en andenes, es necesario subir una fotografia');
-      return; // Detener la ejecución si el formulario no es válido
+        alert('Cuando se selecciona Cantidad de gente en andenes, es necesario subir una fotografía');
+        return; // Detener la ejecución si el formulario no es válido
     }
 
-    //Crear reporte
+    // Crear reporte
     const formData = new FormData();
     formData.append('descripcion', this.reporte.descripcion);
     formData.append('id_usuario', this.reporte.id_usuario);
@@ -257,22 +258,39 @@ export class GenerarReportePage implements OnInit {
     formData.append('direccion', this.reporte.direccion);
     // Agregar la imagen si está presente
     if (this.selectedFile) {
-      formData.append('imagen', this.selectedFile, this.selectedFile.name);
+        formData.append('imagen', this.selectedFile, this.selectedFile.name);
     }
 
-    this.reportService.crearReporte(formData).subscribe(result=>{
-      if(result==="Reporte creado de forma exitosa"){
-        alert("Reporte creado de forma exitosa");
-      }else{
-        alert("Ocurrio un error al generar el reporte");
-      }
-    })
+    try {
+        const result = await this.reportService.crearReporte(formData).toPromise();
 
-    if(this.reporte.titulo === 'Cantidad de gente en andenes'){
-      this.sendPrediction(this.reporte.linea,this.reporte.estacion,this.reporte.direccion,this.selectedFile);
+        if (result === "Reporte creado de forma exitosa") {
+            const alert = await this.alertController.create({
+                header: 'Éxito',
+                message: 'Reporte creado de forma exitosa',
+                buttons: [{
+                    text: 'Aceptar',
+                    handler: () => {
+                        this.datosFiltroService.reporteGenerado(); // Notificar que se ha generado un reporte
+                        this.navCtrl.back(); // Navegar hacia atrás
+                    }
+                }]
+            });
+
+            await alert.present();
+        } else {
+            const alert = await this.alertController.create({
+                header: 'Error',
+                message: 'Ocurrió un error al generar el reporte',
+                buttons: ['Aceptar']
+            });
+
+            await alert.present();
+        }
+    } catch (error) {
+        console.error('Error al crear el reporte: ', error);
     }
-
-  }
+}
 
   sendPrediction(linea: string, estacion: string, direccion: string, imagen: File){
 

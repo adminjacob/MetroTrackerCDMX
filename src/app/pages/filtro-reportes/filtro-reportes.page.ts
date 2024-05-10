@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { DatosFiltroService } from '../../services/datos-filtro.service';
 
 @Component({
@@ -8,6 +8,7 @@ import { DatosFiltroService } from '../../services/datos-filtro.service';
   styleUrls: ['./filtro-reportes.page.scss'],
 })
 export class FiltroReportesPage implements OnInit {
+  
 
   // Opciones de dirección por línea
   direccionesPorLinea = {
@@ -37,7 +38,8 @@ export class FiltroReportesPage implements OnInit {
   };
 
   constructor(private navCtrl: NavController,
-    private datosFiltroService: DatosFiltroService) { }
+    private datosFiltroService: DatosFiltroService,
+    private alertController: AlertController) { }
 
   ngOnInit() {
   }
@@ -53,9 +55,31 @@ export class FiltroReportesPage implements OnInit {
     this.filtro.direccion = this.opcionesDireccionActuales[0]; // Opcional: establecer la primera dirección como seleccionada por defecto
   }
 
-  onSubmit() {
-    this.datosFiltroService.setDatosFiltro(this.filtro);
+  fechaSeleccionada = false;
+  fechaSeleccionada2 = false;
 
+  actualizarFechaSeleccionada() {
+    this.fechaSeleccionada = true;
+  }
+
+  actualizarFechaSeleccionada2() {
+    this.fechaSeleccionada2 = true;
+  }
+
+  async onSubmit() {
+
+    if (!this.filtro.sort && !this.filtro.linea && !this.filtro.direccion && !this.filtro.fechaInicio && !this.filtro.fechaFin) {
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'Por favor, selecciona al menos un parámetro de búsqueda.',
+        buttons: ['OK']
+      });
+
+      await alert.present();
+      return;
+    }
+
+    this.datosFiltroService.setDatosFiltro(this.filtro);
     this.navCtrl.back();
   }
 }

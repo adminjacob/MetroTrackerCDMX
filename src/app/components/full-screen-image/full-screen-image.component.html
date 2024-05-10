@@ -1,9 +1,10 @@
 <div class="full-screen-container" (click)="close()">
-    <ion-slides [options]="sliderOpts" zoom>
-        <ion-slide>
-            <div class="swiper-zoom-container">
-                <img [src]="imageUrl" class="full-screen-image">
-            </div>
-        </ion-slide>
-    </ion-slides>
-</div>
+    <!-- Swiper -->
+    <swiper [zoom]="true" navigation="true" class="swiper-container">
+      <ng-template swiperSlide>
+        <div class="swiper-zoom-container">
+          <img [src]="imageUrl" class="full-screen-image">
+        </div>
+      </ng-template>
+    </swiper>
+  </div>
