@@ -150,7 +150,10 @@ export class GenerarReportePage implements OnInit {
     
   }
 
-  filtrarEstaciones(texto: string) {
+  filtrarEstaciones(event: any) {
+
+    const texto = event.target.value;
+
     if (!texto) {
       this.estacionesFiltradas = this.estaciones; // Si no hay texto de búsqueda, muestra todas las estaciones
     } else {
