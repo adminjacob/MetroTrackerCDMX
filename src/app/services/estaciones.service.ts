@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class EstacionesService {
-  private apiUrl = 'http://localhost:9000/api/estaciones';
+  private apiUrl = 'https://metrotrackerbackend.onrender.com/api/estaciones';
 
   constructor(private http: HttpClient) { }
 

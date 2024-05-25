@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class PredictionService {
-  private apiUrl = 'http://189.157.63.210:80/predict'; // Asegúrate de cambiar esto por la URL real de tu API
+  private apiUrl = 'http://189.157.63.210:80/predict'; 
 
  constructor(private http: HttpClient) { }
 

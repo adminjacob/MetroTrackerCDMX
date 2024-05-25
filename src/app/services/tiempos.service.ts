@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class TiemposService {
-  private apiUrl = 'http://localhost:9000/api/tiempos';
+  private apiUrl = 'https://metrotrackerbackend.onrender.com/api/tiempos';
 
   constructor(private http: HttpClient) { }
 

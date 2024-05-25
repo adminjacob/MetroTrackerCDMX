@@ -7,7 +7,7 @@ import * as CryptoJS from 'crypto-js';
 })
 
 export class UserService {
-  private apiUrl = 'http://localhost:9000/api/users';
+  private apiUrl = 'https://metrotrackerbackend.onrender.com/api/users';
   private key='671fff8b8b7f691c069d9ed9cf2bc3c48e68ee870e6c45d0914ddf06be83dcc3';
 
   constructor(private http: HttpClient) { }

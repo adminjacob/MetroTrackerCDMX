@@ -6,7 +6,7 @@ import { HttpClient, HttpParams  } from '@angular/common/http';
 })
 
 export class ReportService {
-  private apiUrl = 'http://localhost:9000/api/report';
+  private apiUrl = 'https://metrotrackerbackend.onrender.com/api/report';
 
   constructor(private http: HttpClient) { }
 

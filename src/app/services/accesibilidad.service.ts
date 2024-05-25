@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class AccesibilidadService {
-  private apiUrl = 'http://localhost:9000/api/accesibilidad';
+  private apiUrl = 'https://metrotrackerbackend.onrender.com/api/accesibilidad';
 
   constructor(private http: HttpClient) { }
 
