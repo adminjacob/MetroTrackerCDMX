@@ -30,6 +30,9 @@
     
       <div class="input_box">
         <ion-input [type]="viewPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" #passwordRef="ngModel" required [pattern]="passwordPattern" placeholder="Contraseña" ngModel></ion-input>
+        <ion-button (click)="changeType()" fill="clear" slot="end" class="toggle_btn">
+          <ion-icon slot="icon-only" [name]="viewPassword ? 'eye-outline' : 'eye-off-outline'"></ion-icon>
+        </ion-button>
       </div>
       
       <div class="input_box">

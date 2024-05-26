@@ -16,8 +16,8 @@ interface Result {
 })
 export class RegisterPage implements OnInit {
 
-  passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
-
+  passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{}|\\:;"'<>,.?/])[A-Za-z\d!@#$%^&*()_\-+=\[\]{}|\\:;"'<>,.?/]{8,}$/;
+ 
   newUser: User = {
     rol: 'REGISTRADO',
     nombreCompleto: '',

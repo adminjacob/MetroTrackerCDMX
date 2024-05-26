@@ -1,34 +1,44 @@
 .edit_profile_main_content {
     padding: 16px;
-
+  
     .user_image {
-        height: 100px;
-        width: 100px;
-        border-radius: 100%;
-        display: block;
-        margin: auto;
-        margin-top: 40px;
-        margin-bottom: 40px;
+      height: 100px;
+      width: 100px;
+      border-radius: 100%;
+      display: block;
+      margin: auto;
+      margin-top: 40px;
+      margin-bottom: 40px;
     }
-
+  
     ion-button {
-        margin-top: 30px;
+      margin-top: 30px;
     }
-
+  
     .input_box {
-        background: white;
-        border-radius: 8px;
-        margin-bottom: 16px;
-        // padding: 5px 16px;
-        padding: 5px 12px;
-        ion-input {
-            font-family: "regular";
-            text-align: start;
-        }
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      padding: 5px 12px;
+      position: relative; /* Añadido para posicionar el botón dentro del contenedor */
+  
+      ion-input {
+        font-family: "regular";
+        text-align: start;
+        width: calc(100% - 40px); /* Ajusta el ancho para que no solape el botón */
+      }
     }
-}
-
-.error-message {
+  
+    .toggle_btn {
+      position: absolute; /* Añadido para posicionar el botón */
+      top: 50%;
+      right: 12px; /* Ajusta según sea necesario */
+      transform: translateY(-120%);
+    }
+  }
+  
+  .error-message {
     color: red;
     font-size: 0.8em;
-}
+  }
+  

@@ -16,9 +16,11 @@ export class ConfirmPasswordPage implements OnInit {
   newPassword: string;
   confirmPassword: string;
 
-  passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+  passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{}|\\:;"'<>,.?/])[A-Za-z\d!@#$%^&*()_\-+=\[\]{}|\\:;"'<>,.?/]{8,}$/;
 
-  viewPassword: boolean = false;
+  viewPassword = false;
+
+  submitAttempted = false;
 
   constructor(
     private modalController: ModalController,
@@ -28,7 +30,6 @@ export class ConfirmPasswordPage implements OnInit {
   ) {
     const navigation = this.router.getCurrentNavigation();
     this.email=navigation?.extras.state?.email;
-    console.log(this.email);
   }
 
   ngOnInit() {
@@ -43,6 +44,9 @@ export class ConfirmPasswordPage implements OnInit {
   }
 
   onConfirm() {
+
+    this.submitAttempted = true;
+
     if (this.newPassword === this.confirmPassword) {
 
       this.userService.updatePassword(this.email,this.newPassword).subscribe((result:any)=>{
