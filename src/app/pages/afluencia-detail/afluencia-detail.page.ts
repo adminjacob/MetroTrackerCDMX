@@ -21,7 +21,7 @@ export class AfluenciaDetailPage implements OnInit {
     this.route.queryParamMap.subscribe(params => {
       this.linea = params.get('linea');
       this.direccion = params.get('direccion');
-      console.log('Línea:', this.linea, 'Dirección:', this.direccion);
+      //console.log('Línea:', this.linea, 'Dirección:', this.direccion);
       this.cargarAfluencias(this.linea, this.direccion);
     });
 
@@ -32,7 +32,7 @@ export class AfluenciaDetailPage implements OnInit {
     this.afluenciaService.getAfluencias(linea, direccion).subscribe({
       next: (data) => {
         this.afluencias = data;
-        console.log(this.afluencias);
+        //console.log(this.afluencias);
       },
       error: (error) => {
         console.error('Hubo un error al obtener las afluencias:', error);
