@@ -10,12 +10,17 @@
     </ion-segment>
   </ion-toolbar>
 
-  <!-- Última actualización -->
-  <ion-toolbar>
-    <ion-title size="small" style="text-align: center;">
-      Última actualización: {{ ultimoTiempoActualizacion | date: 'dd/MM/yyyy HH:mm' }}
-    </ion-title>
-  </ion-toolbar>
+    <!-- Última actualización para el segmento actual -->
+    <ion-toolbar *ngIf="segment === 'avance'">
+      <ion-title size="small" style="text-align: center;">
+        Última actualización: {{ ultimoTiempoActualizacionAvance | date: 'dd/MM/yyyy HH:mm' }}
+      </ion-title>
+    </ion-toolbar>
+    <ion-toolbar *ngIf="segment === 'anuncios'">
+      <ion-title size="small" style="text-align: center;">
+        Última actualización: {{ ultimoTiempoActualizacionAnuncios | date: 'dd/MM/yyyy HH:mm' }}
+      </ion-title>
+    </ion-toolbar>
 
 </ion-header>
 

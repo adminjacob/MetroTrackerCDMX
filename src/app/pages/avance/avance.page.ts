@@ -9,8 +9,8 @@ import { TweetsService } from 'src/app/services/tweets.service';
 })
 export class AvancePage implements OnInit {
 
-
-  ultimoTiempoActualizacion = new Date();
+  ultimoTiempoActualizacionAvance = new Date();
+  ultimoTiempoActualizacionAnuncios = new Date();
   tweets:any=[];
 
   constructor(private tweetService:TweetsService,
@@ -39,13 +39,14 @@ export class AvancePage implements OnInit {
   ];
 
   actualizarDatos() {
-    this.tweetService.obtenerTweets().subscribe(result=>{
+    this.tweetService.obtenerTweets().subscribe((result:any)=>{
       this.tweets=result;
+      this.ultimoTiempoActualizacionAnuncios=this.tweets[0].tweetDate;
     });
 
     this.tiemposService.obtenerTiempo().subscribe((result:any)=>{
     
-      this.ultimoTiempoActualizacion=result.fechaHoraRegistro;
+      this.ultimoTiempoActualizacionAvance=result.fechaHoraRegistro;
 
       this.lineas[0].tiempo=result.tiempos.linea_1;
       this.lineas[1].tiempo=result.tiempos.linea_2;

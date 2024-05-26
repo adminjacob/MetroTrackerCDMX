@@ -6,6 +6,7 @@ import { ModalController } from '@ionic/angular';
 import { FullScreenImageComponent } from '../../components/full-screen-image/full-screen-image.component';
 import { LoadingController } from '@ionic/angular';
 import { DatosFiltroService } from '../../services/datos-filtro.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-comunidad',
@@ -22,7 +23,8 @@ export class ComunidadPage implements OnInit {
     private reporteService: ReportService, 
     private modalController: ModalController, 
     private loadingController: LoadingController,
-    private datosFiltroService: DatosFiltroService) {
+    private datosFiltroService: DatosFiltroService,
+    private userService: UserService) {
       this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
@@ -46,7 +48,8 @@ export class ComunidadPage implements OnInit {
   }
 
   ngOnInit() {
-    this.idUser = localStorage.getItem('id') || '';
+    const encryptedId=localStorage.getItem('id');
+    this.idUser=this.userService.decrypt(encryptedId);
     this.cargarReportes();
 
     // Escuchar cuando se genera un nuevo reporte
