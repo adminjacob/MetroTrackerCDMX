@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class AfluenciaService {
-  private apiUrl = 'http://localhost:9000/api';
+  private apiUrl = 'https://metrotrackerbackend.onrender.com/api';
 
   constructor(private http: HttpClient) { }
 
