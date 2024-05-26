@@ -11,7 +11,6 @@ export class AfluenciaDetailPage implements OnInit {
 
   linea: string = '';
   direccion: string = ''; 
-  ultimoTiempoActualizacion = new Date();
 
   afluencias: any = [];
 
@@ -23,7 +22,6 @@ export class AfluenciaDetailPage implements OnInit {
       this.linea = params.get('linea');
       this.direccion = params.get('direccion');
       console.log('Línea:', this.linea, 'Dirección:', this.direccion);
-      this.actualizarDatos();
       this.cargarAfluencias(this.linea, this.direccion);
     });
 
@@ -34,7 +32,7 @@ export class AfluenciaDetailPage implements OnInit {
     this.afluenciaService.getAfluencias(linea, direccion).subscribe({
       next: (data) => {
         this.afluencias = data;
-        //console.log(this.afluencias);
+        console.log(this.afluencias);
       },
       error: (error) => {
         console.error('Hubo un error al obtener las afluencias:', error);
@@ -81,11 +79,6 @@ export class AfluenciaDetailPage implements OnInit {
   
   toggleConfigMode() {
     this.configMode = this.configMode === 'basica' ? 'detallada' : 'basica';
-  }
-  
-  actualizarDatos() {
-    // Lógica para actualizar los datos
-    this.ultimoTiempoActualizacion = new Date(); // Actualiza la hora de la última actualización
   }
   
 }

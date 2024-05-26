@@ -11,17 +11,10 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <!-- Última actualización -->
-  <ion-toolbar>
-    <ion-title size="small" style="text-align: center;">
-      Última actualización: {{ ultimoTiempoActualizacion | date: 'dd/MM/yyyy HH:mm' }}
-    </ion-title>
-  </ion-toolbar>
-
 </ion-header>
 
 <ion-content>
-    <!-- Configuración Detallada -->
+  <!-- Configuración Detallada -->
   <ng-container *ngIf="configMode === 'detallada'">
     <ion-list>
       <ion-item *ngFor="let estacion of afluencias">
@@ -31,6 +24,7 @@
         <div class="progress-container" [ngClass]="getProgressBarClass(estacion.afluencia)">
           <ion-progress-bar [value]="estacion.afluencia/100" [ngClass]="getProgressBarClass(estacion.afluencia)"></ion-progress-bar>
           <div class="progress-label">{{ getProgressLabel(estacion.afluencia) }} ({{ estacion.afluencia }}%)</div>
+          <div class="timestamp-label">{{ estacion.timestamp | date: 'dd/MM/yyyy HH:mm' }}</div>
         </div>
       </ion-item>
     </ion-list>

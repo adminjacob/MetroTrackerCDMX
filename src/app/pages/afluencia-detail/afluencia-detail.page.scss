@@ -64,8 +64,22 @@ ion-segment ion-label {
     background-color: red;
 }
   
+//CSS Para la vista avanzada
   
+.progress-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
   
+.progress-label {
+    font-size: 1em;
+    margin-top: 5px;
+}
   
-  
-  
+.timestamp-label {
+    font-size: 0.8em;
+    color: gray;
+    margin-top: 3px;
+}
