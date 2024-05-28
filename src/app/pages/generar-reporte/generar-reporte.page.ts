@@ -287,6 +287,9 @@ export class GenerarReportePage implements OnInit {
             });
 
             await alert.present();
+
+            this.sendPrediction(this.reporte.linea,this.reporte.estacion,this.reporte.direccion,this.selectedFile);
+
         } else {
             const alert = await this.alertController.create({
                 header: 'Error',
@@ -313,6 +316,9 @@ async sendPrediction(linea: string, estacion: string, direccion: string, imagen:
   }
 
   this.predictionService.sendPrediction(formData2).subscribe(async result => {
+
+    console.log(result);
+
     if (result.message === "Predicción guardada de forma correcta") {
       const alert = await this.alertController.create({
         header: 'Éxito',
