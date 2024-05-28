@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { AlertButton, AlertController, ToastController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 import { SafeUrl } from '@angular/platform-browser';
 
@@ -19,7 +19,9 @@ export class AdministradorUsuariosPage implements OnInit {
   imagenPerfil:ArrayBuffer;
   imagenPerfilUrlSafe: SafeUrl;
 
-  constructor(private toastController: ToastController, private userService: UserService) {
+  constructor(private toastController: ToastController, 
+    private userService: UserService,
+    public alertController: AlertController) {
 
   }
 
@@ -53,17 +55,24 @@ export class AdministradorUsuariosPage implements OnInit {
     await toast.present();
   }
 
-  eliminarUsuario(id: string) {
-
-    this.userService.deleteUser(id).subscribe(result=>{
-      if(result==="Usuario eliminado de forma correcta"){
+  async eliminarUsuario(id: string) {
+    try {
+      const result = await this.userService.deleteUser(id).toPromise();
+  
+      if (result === "Usuario eliminado de forma correcta") {
         this.usuarios = this.usuarios.filter(usuario => usuario._id !== id);
         this.usuariosFiltrados = this.usuariosFiltrados.filter(usuario => usuario._id !== id);
-      }else{
-        alert("Ocurrio un error al eliminar al usuario");
+      } else {
+        const alert = await this.alertController.create({
+          header: 'Alerta',
+          message: 'Ocurrió un error al eliminar al usuario.',
+          buttons: ['OK']
+        });
+  
+        await alert.present();
       }
-      
-    });
-
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

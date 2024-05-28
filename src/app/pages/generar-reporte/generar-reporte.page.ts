@@ -247,7 +247,13 @@ export class GenerarReportePage implements OnInit {
     }
 
     if(this.reporte.titulo === 'Cantidad de gente en andenes' && this.photoTaken==false){
-        alert('Cuando se selecciona Cantidad de gente en andenes, es necesario subir una fotografía');
+        const alert = await this.alertController.create({
+          header: 'Alerta',
+          message: 'Cuando se selecciona Cantidad de gente en andenes, es necesario subir una fotografía',
+          buttons: ['OK']
+        });
+      
+        await alert.present();
         return; // Detener la ejecución si el formulario no es válido
     }
 
@@ -295,26 +301,36 @@ export class GenerarReportePage implements OnInit {
     }
 }
 
-  sendPrediction(linea: string, estacion: string, direccion: string, imagen: File){
-
-    // Crear reporte
-    const formData2 = new FormData();
-    formData2.append('line', linea);
-    formData2.append('station', estacion);
-    formData2.append('direction', direccion);
-    // Agregar la imagen si está presente
-    if (imagen) {
-      formData2.append('file', imagen, imagen.name);
-    }
-
-    this.predictionService.sendPrediction(formData2).subscribe(result=>{
-      if(result.message==="Predicción guardada de forma correcta"){
-        alert("Predicción guardada de forma correcta");
-      }else{
-        alert("Ocurrio un error al guardar la prediccion");
-      }
-    })
-
+async sendPrediction(linea: string, estacion: string, direccion: string, imagen: File) {
+  // Crear reporte
+  const formData2 = new FormData();
+  formData2.append('line', linea);
+  formData2.append('station', estacion);
+  formData2.append('direction', direccion);
+  // Agregar la imagen si está presente
+  if (imagen) {
+    formData2.append('file', imagen, imagen.name);
   }
+
+  this.predictionService.sendPrediction(formData2).subscribe(async result => {
+    if (result.message === "Predicción guardada de forma correcta") {
+      const alert = await this.alertController.create({
+        header: 'Éxito',
+        message: 'Predicción guardada de forma correcta.',
+        buttons: ['OK']
+      });
+
+      await alert.present();
+    } else {
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'Ocurrió un error al guardar la predicción.',
+        buttons: ['OK']
+      });
+
+      await alert.present();
+    }
+  });
+}
 
 }

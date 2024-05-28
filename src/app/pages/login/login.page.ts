@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 import { NgForm } from '@angular/forms';
 
@@ -25,7 +25,10 @@ export class LoginPage implements OnInit {
 
   @ViewChild('loginForm') loginForm: NgForm;
 
-  constructor(private navCtrl: NavController, private router: Router, private userService: UserService) {
+  constructor(private navCtrl: NavController, 
+    private router: Router, 
+    private userService: UserService,
+    public alertController: AlertController) {
   }
 
   ngOnInit() {
@@ -39,41 +42,44 @@ export class LoginPage implements OnInit {
     this.router.navigate(['forgot']);
   }
 
-  onLogin() {
-
+  async onLogin() {
     this.submitAttempted = true;
-
+  
     // Verificar si el formulario es válido
     if (!this.loginForm.valid) {
       console.log('Formulario no válido, no se puede avanzar.');
       return; // Detener la ejecución si el formulario no es válido
     }
-
-    this.userService.getPasswordByEmail(this.correo).subscribe((result:Result)=> {
-
+  
+    this.userService.getPasswordByEmail(this.correo).subscribe(async (result: any) => {
       const id = result.id; // Obtiene el id del resultado
       const encryptedPassword = result.contrasenia; // Obtiene la contraseña encriptada del resultado
       const decryptedPassword = this.userService.decrypt(encryptedPassword);
-      
-      const encryptedId=this.userService.encrypt(id);
-
+      const encryptedId = this.userService.encrypt(id);
+  
       // Guarda el id en las cookies
       localStorage.setItem('intro', 'true');
       localStorage.setItem('logged', 'true');
-      localStorage.setItem('id',encryptedId);
+      localStorage.setItem('id', encryptedId);
   
       // Compara la contraseña obtenida con la proporcionada por el usuario
       if (this.contrasena == decryptedPassword) {
         // Si coinciden, navega a la página principal
-        if(this.correo=="administrador@gmail.com"){
+        if (this.correo == "administrador@gmail.com") {
           localStorage.setItem('admin', 'true');
           this.router.navigate(['/administrador-tabs']);
-        }else{
+        } else {
           this.navCtrl.navigateRoot(['']);
         }
       } else {
         // Si no coinciden, mostrar un mensaje de error
-        alert('Usuario o contraseña incorrecta');
+        const alert = await this.alertController.create({
+          header: 'Error',
+          message: 'Usuario o contraseña incorrecta.',
+          buttons: ['OK']
+        });
+  
+        await alert.present();
       }
     });
   }

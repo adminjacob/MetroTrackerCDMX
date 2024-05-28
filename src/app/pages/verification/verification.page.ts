@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-verification',
@@ -26,10 +26,9 @@ export class VerificationPage implements OnInit {
     }
   };
 
-  constructor(
-    private navCtrl: NavController,
-    private router: Router
-  ) { 
+  constructor(private navCtrl: NavController,
+    private router: Router,
+    public alertController: AlertController) { 
     const navigation = this.router.getCurrentNavigation();
     this.verificationCode = navigation?.extras.state?.verificationCode;
     this.email=navigation?.extras.state?.email;
@@ -47,21 +46,24 @@ export class VerificationPage implements OnInit {
     this.otp = otp;
   }
 
-  onContinue(): void {
-
-    if (this.otp.length === 5 && this.otp==this.verificationCode) {
-
-      // Crear NavigationExtras para pasar el correo a la página de verificación
+  async onContinue() {
+    if (this.otp.length === 5 && this.otp == this.verificationCode) {
+      // Crear NavigationExtras para pasar el correo a la página de confirmación de contraseña
       const navigationExtras: NavigationExtras = {
         state: {
           email: this.email
-       }
+        }
       };
-
+  
       this.router.navigate(['confirm-password'], navigationExtras);
-
     } else {
-      alert('Codigo invalido, favor de intentar de nuevo');
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'Código inválido, favor de intentar de nuevo.',
+        buttons: ['OK']
+      });
+  
+      await alert.present();
     }
   }
 

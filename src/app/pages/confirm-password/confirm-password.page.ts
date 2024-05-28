@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavController } from '@ionic/angular';
+import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { PasswordChangedPage } from '../password-changed/password-changed.page';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-confirm-password',
@@ -15,19 +16,16 @@ export class ConfirmPasswordPage implements OnInit {
 
   newPassword: string;
   confirmPassword: string;
-
   passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=\[\]{}|\\:;"'<>,.?/])[A-Za-z\d!@#$%^&*()_\-+=\[\]{}|\\:;"'<>,.?/]{8,}$/;
-
   viewPassword = false;
-
   submitAttempted = false;
+  passwordsDontMatch: boolean = false;
 
-  constructor(
-    private modalController: ModalController,
+  constructor(private modalController: ModalController,
     private navCtrl: NavController,
     private router: Router,
-    private userService: UserService
-  ) {
+    private userService: UserService,
+    public alertController: AlertController) {
     const navigation = this.router.getCurrentNavigation();
     this.email=navigation?.extras.state?.email;
   }
@@ -43,21 +41,32 @@ export class ConfirmPasswordPage implements OnInit {
     this.navCtrl.back();
   }
 
-  onConfirm() {
-
+  async onConfirm(form: NgForm) {
     this.submitAttempted = true;
 
-    if (this.newPassword === this.confirmPassword) {
+    if (this.newPassword !== this.confirmPassword) {
+      this.passwordsDontMatch = true;
+      return;
+    }
 
-      this.userService.updatePassword(this.email,this.newPassword).subscribe((result:any)=>{
-        if(result==='Contraseña actualizada correctamente'){
+    this.passwordsDontMatch = false;
+  
+    if (form.valid) {
+      this.userService.updatePassword(this.email, this.newPassword).subscribe(async (result: any) => {
+        if (result === 'Contraseña actualizada correctamente') {
           this.onConfirm2();
         }
+        else {
+          const alert = await this.alertController.create({
+            header: 'Alerta',
+            message: 'Hubo un error al actualizar la contraseña',
+            buttons: ['OK']
+          });
+      
+          await alert.present();
+        }
       });
-
-    } else {
-      alert('Las contraseñas no coinciden');
-    }
+    } 
   }
 
   async onConfirm2(){

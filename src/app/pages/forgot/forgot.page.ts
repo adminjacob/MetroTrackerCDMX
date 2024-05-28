@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras  } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -13,11 +13,10 @@ export class ForgotPage implements OnInit {
   email: string = '';
   submitAttempted = false;
 
-  constructor(
-    private navCtrl: NavController,
+  constructor(private navCtrl: NavController,
     private router: Router,
-    private userService: UserService
-  ) { }
+    private userService: UserService,
+    public alertController: AlertController) { }
 
   ngOnInit() {
   }
@@ -26,30 +25,40 @@ export class ForgotPage implements OnInit {
     this.navCtrl.back();
   }
 
-  onSend(form: any) {
-
+  async onSend(form: any) {
     this.submitAttempted = true;
-    
+  
     if (form.valid) {
-      this.userService.sendCode(this.email).subscribe((result:any)=>{
-
-          if(result=='Error al enviar el correo'){
-            alert('Ocurrio un error al enviar el correo, favor de intentarlo de nuevo.');
-          }else if(result=='Usuario no encontrado'){
-            alert('No se encontro el usuario');
-          }else{
-            const codigo=result.code;
-            // Crear NavigationExtras para pasar el código a la página de verificación
-            const navigationExtras: NavigationExtras = {
-              state: {
-                verificationCode: codigo,
-                email: this.email
-             }
-            };
-
-            this.router.navigate(['verification'], navigationExtras);
-          }
-      });   
-    } 
+      this.userService.sendCode(this.email).subscribe(async (result: any) => {
+        if (result === 'Error al enviar el correo') {
+          const alert = await this.alertController.create({
+            header: 'Error',
+            message: 'Ocurrió un error al enviar el correo, favor de intentarlo de nuevo.',
+            buttons: ['OK']
+          });
+  
+          await alert.present();
+        } else if (result === 'Usuario no encontrado') {
+          const alert = await this.alertController.create({
+            header: 'Error',
+            message: 'No se encontró el usuario.',
+            buttons: ['OK']
+          });
+  
+          await alert.present();
+        } else {
+          const codigo = result.code;
+          // Crear NavigationExtras para pasar el código a la página de verificación
+          const navigationExtras: NavigationExtras = {
+            state: {
+              verificationCode: codigo,
+              email: this.email
+            }
+          };
+  
+          this.router.navigate(['verification'], navigationExtras);
+        }
+      });
+    }
   }
 }

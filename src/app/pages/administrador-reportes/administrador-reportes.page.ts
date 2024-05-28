@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ReportService } from 'src/app/services/report.service';
-import { ModalController, ToastController } from '@ionic/angular';
+import { AlertController, ModalController, ToastController } from '@ionic/angular';
 import { FullScreenImageComponent } from '../../components/full-screen-image/full-screen-image.component';
 import { LoadingController } from '@ionic/angular';
 import { DatosFiltroService } from '../../services/datos-filtro.service';
@@ -24,7 +24,8 @@ export class AdministradorReportesPage implements OnInit {
     private modalController: ModalController, 
     private loadingController: LoadingController,
     private datosFiltroService: DatosFiltroService,
-    private toastController:ToastController) {
+    private toastController:ToastController,
+    public alertController: AlertController) {
       this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
@@ -124,16 +125,24 @@ export class AdministradorReportesPage implements OnInit {
     await toast.present();
   }
 
-  eliminarReporte(reporte) {
-
-    this.reporteService.deleteReport(reporte.id).subscribe(result=>{
-      
-      if(result==="Reporte eliminado con éxito."){
+  async eliminarReporte(reporte) {
+    try {
+      const result = await this.reporteService.deleteReport(reporte.id).toPromise();
+  
+      if (result === "Reporte eliminado con éxito.") {
         this.reportes = this.reportes.filter(r => r !== reporte);
-      }else{
-        alert("Ocurrio un error al eliminar el reporte.");
+      } else {
+        const alert = await this.alertController.create({
+          header: 'Alerta',
+          message: 'Ocurrió un error al eliminar el reporte.',
+          buttons: ['OK']
+        });
+  
+        await alert.present();
       }
-    });
-   
+    } catch (error) {
+      console.log(error);
+    }
   }
+
 }

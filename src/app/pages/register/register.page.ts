@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 import { User } from '../../models/user.model';
 import { NgForm } from '@angular/forms';
@@ -37,7 +37,9 @@ export class RegisterPage implements OnInit {
 
   @ViewChild('registerForm') registerForm: NgForm;
 
-  constructor(private navCtrl: NavController, private userService: UserService) {
+  constructor(private navCtrl: NavController, 
+    private userService: UserService,
+    public alertController: AlertController) {
   }
 
   ngOnInit() {
@@ -51,28 +53,38 @@ export class RegisterPage implements OnInit {
     this.navCtrl.back();
   }
 
-  onRegister() {
-
+  async onRegister() {
     this.submitAttempted = true;
-
+  
     // Verificar si el formulario es válido
     if (!this.registerForm.valid) {
       console.log('Formulario no válido, no se puede avanzar.');
       return; // Detener la ejecución si el formulario no es válido
     }
-
-    this.userService.addUser(this.newUser).subscribe((result:Result) => {
-      const message = result.message; 
-      const id = result.id; 
-
-      if(message==="Usuario registrado correctamente" || message==="El correo electrónico ya está registrado. Por favor, use uno diferente."){
-        alert(message);
+  
+    this.userService.addUser(this.newUser).subscribe(async (result: any) => {
+      const message = result.message;
+      const id = result.id;
+  
+      if (message === "Usuario registrado correctamente" || message === "El correo electrónico ya está registrado. Por favor, use uno diferente.") {
+        const alert = await this.alertController.create({
+          header: 'Información',
+          message: message,
+          buttons: ['OK']
+        });
+  
+        await alert.present();
         this.registerForm.resetForm();
         this.submitAttempted = false;
+      } else {
+        const alert = await this.alertController.create({
+          header: 'Error',
+          message: 'Ocurrió un error al registrarse, favor de intentar de nuevo.',
+          buttons: ['OK']
+        });
+  
+        await alert.present();
       }
-      else{
-        alert('Ocurrio un error al registrarse, favor de intentar de nuevo');
-      }
-    });    
+    });
   }
 }

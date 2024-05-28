@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActionSheetController, NavController } from '@ionic/angular';
+import { ActionSheetController, AlertController, NavController } from '@ionic/angular';
 import { NgForm } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
@@ -34,7 +34,8 @@ export class EditProfilePage implements OnInit {
 
   constructor(private actionSheetCtrl: ActionSheetController, 
     private navCtrl: NavController, 
-    private userService: UserService) { 
+    private userService: UserService,
+    public alertController: AlertController) { 
   }
 
   ngOnInit() {
@@ -61,29 +62,44 @@ export class EditProfilePage implements OnInit {
     this.navCtrl.back();
   }
 
-  updateUser(form: NgForm) {
+  async updateUser(form: NgForm) {
     this.submitAttempted = true;
-
+  
     if (this.password !== this.confirmPassword) {
       this.passwordsDontMatch = true;
       return;
     }
-
+  
     this.passwordsDontMatch = false;
-
+  
     if (form.valid) {
-
-      this.updatedUser.nombreCompleto=this.nombreCompleto;
-      this.updatedUser.contrasenia=this.password;
-
+      this.updatedUser.nombreCompleto = this.nombreCompleto;
+      this.updatedUser.contrasenia = this.password;
+  
       console.log(this.id);
-
-      this.userService.updateUser(this.id,this.updatedUser).subscribe(result=>{
+      console.log(this.updatedUser);
+  
+      this.userService.updateUser(this.id, this.updatedUser).subscribe(async (result: any) => {
         console.log(result);
+        if (result === 'Información actualizada de forma correcta') {
+          const alert = await this.alertController.create({
+            header: 'Éxito',
+            message: 'La información se ha actualizado correctamente.',
+            buttons: ['OK']
+          });
+  
+          await alert.present();
+        } else {
+          const alert = await this.alertController.create({
+            header: 'Error',
+            message: 'Hubo un problema al actualizar la información. Por favor, inténtalo de nuevo.',
+            buttons: ['OK']
+          });
+  
+          await alert.present();
+        }
       });
     }
-
-    
   }
 
   async getImage() {
@@ -121,29 +137,44 @@ export class EditProfilePage implements OnInit {
   }
 
   async takePicture(source: CameraSource) {
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: false,
-      resultType: CameraResultType.Uri,
-      source: source // CameraSource.Camera para cámara o CameraSource.Photos para galería
-    });
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Uri,
+        source: source // CameraSource.Camera para cámara o CameraSource.Photos para galería
+      });
   
-    // La imagen está disponible en image.webPath
-    var imageUrl = image.webPath;
-
-    fetch(imageUrl).then(res => res.blob()).then(blob => {
+      // La imagen está disponible en image.webPath
+      const imageUrl = image.webPath;
+  
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
       const file = new File([blob], "filename.jpeg", { type: "image/jpeg" });
-      this.userService.updateProfilePicture(this.id, file).subscribe(result=>{
-
-        if(result==="Imagen de perfil actualizada de forma correcta"){
-          alert("Imagen de perfil actualizada de forma correcta");
+  
+      this.userService.updateProfilePicture(this.id, file).subscribe(async result => {
+        if (result === "Imagen de perfil actualizada de forma correcta") {
+          const alert = await this.alertController.create({
+            header: 'Éxito',
+            message: 'Imagen de perfil actualizada de forma correcta.',
+            buttons: ['OK']
+          });
+  
+          await alert.present();
           this.getInformation();
-        }else{
-          alert("Error al actualizar la imagen de perfil");
+        } else {
+          const alert = await this.alertController.create({
+            header: 'Error',
+            message: 'Error al actualizar la imagen de perfil.',
+            buttons: ['OK']
+          });
+  
+          await alert.present();
         }
       });
-    });
-  
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 }
