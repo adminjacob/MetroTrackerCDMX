@@ -281,14 +281,20 @@ export class GenerarReportePage implements OnInit {
                     text: 'Aceptar',
                     handler: () => {
                         this.datosFiltroService.reporteGenerado(); // Notificar que se ha generado un reporte
+
+                        if(this.reporte.titulo === 'Cantidad de gente en andenes'){
+                          this.sendPrediction(this.reporte.linea,this.reporte.estacion,this.reporte.direccion,this.selectedFile);
+                        }
+
                         this.navCtrl.back(); // Navegar hacia atrás
+
                     }
                 }]
             });
 
             await alert.present();
 
-            this.sendPrediction(this.reporte.linea,this.reporte.estacion,this.reporte.direccion,this.selectedFile);
+            
 
         } else {
             const alert = await this.alertController.create({
