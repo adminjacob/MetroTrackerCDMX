@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tabs',
@@ -7,6 +8,18 @@ import { Component } from '@angular/core';
 })
 export class TabsPage {
 
-  constructor() { }
+  isUserLoggedIn: boolean;
+
+  constructor(private navCtrl: NavController) { }
+
+  ngOnInit() {
+    const intro = localStorage.getItem('intro');
+    this.isUserLoggedIn = !!intro && intro !== 'null';
+  }
+
+  salir(){
+    localStorage.clear();
+    this.navCtrl.navigateRoot(['/intro']);
+  }
 
 }

@@ -18,6 +18,7 @@ export class ComunidadPage implements OnInit {
   idUser: string = "";
   filtro: any = {};
   previousUrl: string = '';
+  isUserLoggedIn: boolean;
 
   constructor(private router: Router, 
     private reporteService: ReportService, 
@@ -48,8 +49,15 @@ export class ComunidadPage implements OnInit {
   }
 
   ngOnInit() {
-    const encryptedId=localStorage.getItem('id');
-    this.idUser=this.userService.decrypt(encryptedId);
+
+    const intro = localStorage.getItem('intro');
+    this.isUserLoggedIn = !!intro && intro !== 'null';
+
+    if(this.isUserLoggedIn){
+      const encryptedId=localStorage.getItem('id');
+      this.idUser=this.userService.decrypt(encryptedId);
+    }
+    
     this.cargarReportes();
 
     // Escuchar cuando se genera un nuevo reporte

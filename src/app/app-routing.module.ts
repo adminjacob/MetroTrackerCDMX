@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guard/auth.guard';
+import { AuthGuardAdmin } from './guard/auth-admin.guard';
 
 const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule),
-    canActivate: [AuthGuard]
   },
   {
     path: 'intro',
@@ -26,7 +26,7 @@ const routes: Routes = [
   },
   {
     path: 'verification',
-    loadChildren: () => import('./pages/verification/verification.module').then(m => m.VerificationPageModule)
+    loadChildren: () => import('./pages/verification/verification.module').then(m => m.VerificationPageModule),
   },
   {
     path: 'confirm-password',
@@ -38,35 +38,41 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
+    loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'edit-profile',
-    loadChildren: () => import('./pages/edit-profile/edit-profile.module').then(m => m.EditProfilePageModule)
+    loadChildren: () => import('./pages/edit-profile/edit-profile.module').then(m => m.EditProfilePageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'afluencia',
-    loadChildren: () => import('./pages/afluencia/afluencia.module').then( m => m.AfluenciaPageModule)
+    loadChildren: () => import('./pages/afluencia/afluencia.module').then( m => m.AfluenciaPageModule),
   },
   {
     path: 'afluencia-detail',
-    loadChildren: () => import('./pages/afluencia-detail/afluencia-detail.module').then( m => m.AfluenciaDetailPageModule)
+    loadChildren: () => import('./pages/afluencia-detail/afluencia-detail.module').then( m => m.AfluenciaDetailPageModule),
   },
   {
     path: 'avance',
-    loadChildren: () => import('./pages/avance/avance.module').then( m => m.AvancePageModule)
+    loadChildren: () => import('./pages/avance/avance.module').then( m => m.AvancePageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'informacion',
-    loadChildren: () => import('./pages/informacion/informacion.module').then( m => m.InformacionPageModule)
+    loadChildren: () => import('./pages/informacion/informacion.module').then( m => m.InformacionPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'comunidad',
-    loadChildren: () => import('./pages/comunidad/comunidad.module').then( m => m.ComunidadPageModule)
+    loadChildren: () => import('./pages/comunidad/comunidad.module').then( m => m.ComunidadPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'notificaciones',
-    loadChildren: () => import('./pages/notificaciones/notificaciones.module').then( m => m.NotificacionesPageModule)
+    loadChildren: () => import('./pages/notificaciones/notificaciones.module').then( m => m.NotificacionesPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'administrador-usuarios',
@@ -78,19 +84,18 @@ const routes: Routes = [
   },
   {
     path: 'administrador-tabs',
-    loadChildren: () => import('./pages/administrador-tabs/administrador-tabs.module').then( m => m.AdministradorTabsPageModule)
+    loadChildren: () => import('./pages/administrador-tabs/administrador-tabs.module').then( m => m.AdministradorTabsPageModule),
+    canActivate: [AuthGuardAdmin]
   },
   {
     path: 'generar-reporte',
-    loadChildren: () => import('./pages/generar-reporte/generar-reporte.module').then( m => m.GenerarReportePageModule)
-  },
-  {
-    path: 'linea-direccion',
-    loadChildren: () => import('./pages/linea-direccion/linea-direccion.module').then( m => m.LineaDireccionPageModule)
+    loadChildren: () => import('./pages/generar-reporte/generar-reporte.module').then( m => m.GenerarReportePageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'filtro-reportes',
-    loadChildren: () => import('./pages/filtro-reportes/filtro-reportes.module').then( m => m.FiltroReportesPageModule)
+    loadChildren: () => import('./pages/filtro-reportes/filtro-reportes.module').then( m => m.FiltroReportesPageModule),
+    canActivate: [AuthGuard]
   }
 
 

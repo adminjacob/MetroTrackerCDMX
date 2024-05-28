@@ -18,7 +18,9 @@ export class ProfilePage implements OnInit {
   nombreCompleto:string="";
   imagenPerfil:string;
 
-  constructor(private navCtrl: NavController, private router: Router, private userService: UserService) { 
+  constructor(private navCtrl: NavController, 
+    private router: Router, 
+    private userService: UserService) { 
 
   }
 

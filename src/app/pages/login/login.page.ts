@@ -59,25 +59,32 @@ export class LoginPage implements OnInit {
 
       // Guarda el id en las cookies
       localStorage.setItem('intro', 'true');
+      localStorage.setItem('logged', 'true');
       localStorage.setItem('id',encryptedId);
   
       // Compara la contraseña obtenida con la proporcionada por el usuario
       if (this.contrasena == decryptedPassword) {
-        // Si coinciden, navega a la página principal o a donde necesites
-        this.navCtrl.navigateRoot(['']);
+        // Si coinciden, navega a la página principal
+        if(this.correo=="administrador@gmail.com"){
+          localStorage.setItem('admin', 'true');
+          this.router.navigate(['/administrador-tabs']);
+        }else{
+          this.navCtrl.navigateRoot(['']);
+        }
       } else {
-        // Si no coinciden, muestra un mensaje de error
+        // Si no coinciden, mostrar un mensaje de error
         alert('Usuario o contraseña incorrecta');
       }
     });
   }
 
-  onSocial() {
-    localStorage.setItem('intro', 'true');
-    this.navCtrl.navigateRoot(['']);
-  }
-
   onRegister() {
     this.router.navigate(['register']);
   }
+
+  ingresar() {
+    this.navCtrl.navigateRoot(['']);
+  }
+
+
 }
