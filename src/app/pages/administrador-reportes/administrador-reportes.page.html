@@ -39,11 +39,11 @@
             <img *ngIf="reporte.imagen" [src]="reporte.imagen" alt="Imagen del reporte" (click)="openImageFullScreen(reporte.imagen)">
             <ion-button fill="clear">
               <ion-icon slot="icon-only" name="heart"></ion-icon>
-              {{ reporte.likes }}
+              <span class="like-dislike-count">{{ reporte.likes }}</span>
             </ion-button>
             <ion-button fill="clear">
               <ion-icon slot="icon-only" name="heart-dislike"></ion-icon>
-              {{ reporte.dislikes }}
+              <span class="like-dislike-count">{{ reporte.dislikes }}</span>
             </ion-button>
           </ion-card-content>
         </ion-card>

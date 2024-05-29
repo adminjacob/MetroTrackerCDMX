@@ -38,14 +38,26 @@
             <p>Descripcion: {{ reporte.descripcion }}</p>
             <br>
             <img *ngIf="reporte.imagen" [src]="reporte.imagen" alt="Imagen del reporte" (click)="openImageFullScreen(reporte.imagen)">
-            <ion-button fill="clear" (click)="likeReporte(reporte.id)" [color]="usuarioHaDadoLike(reporte.id) ? 'primary' : 'medium'">
-              <ion-icon slot="icon-only" name="heart"></ion-icon>
-              <span class="like-dislike-count">{{ reporte.likes }}</span>
-            </ion-button>
-            <ion-button fill="clear" (click)="dislikeReporte(reporte.id)" [color]="usuarioHaDadoDislike(reporte.id) ? 'primary' : 'medium'">
-              <ion-icon slot="icon-only" name="heart-dislike"></ion-icon>
-              <span class="like-dislike-count">{{ reporte.dislikes }}</span>
-            </ion-button>
+            <ng-container *ngIf="isUserLoggedIn; else notLoggedIn">
+              <ion-button fill="clear" (click)="likeReporte(reporte.id)" [color]="usuarioHaDadoLike(reporte.id) ? 'primary' : 'medium'">
+                <ion-icon slot="icon-only" name="heart"></ion-icon>
+                <span class="like-dislike-count">{{ reporte.likes }}</span>
+              </ion-button>
+              <ion-button fill="clear" (click)="dislikeReporte(reporte.id)" [color]="usuarioHaDadoDislike(reporte.id) ? 'primary' : 'medium'">
+                <ion-icon slot="icon-only" name="heart-dislike"></ion-icon>
+                <span class="like-dislike-count">{{ reporte.dislikes }}</span>
+              </ion-button>
+            </ng-container>
+            <ng-template #notLoggedIn>
+              <ion-button fill="clear">
+                <ion-icon slot="icon-only" name="heart"></ion-icon>
+                <span class="like-dislike-count">{{ reporte.likes }}</span>
+              </ion-button>
+              <ion-button fill="clear">
+                <ion-icon slot="icon-only" name="heart-dislike"></ion-icon>
+                <span class="like-dislike-count">{{ reporte.dislikes }}</span>
+              </ion-button>
+            </ng-template>
         </ion-card-content>
     </ion-card>
   </ion-list>

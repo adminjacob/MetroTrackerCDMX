@@ -6,4 +6,12 @@ ion-card {
 .card-container {
     margin-bottom: 16px; /* Ajusta este valor según la cantidad de espacio deseado */
 }
+
+.like-dislike-button {
+    display: flex;
+    align-items: center;
+}
   
+.like-dislike-count {
+    margin-left: 5px;
+}

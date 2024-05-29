@@ -26,24 +26,36 @@ export class AdministradorReportesPage implements OnInit {
     private datosFiltroService: DatosFiltroService,
     private toastController:ToastController,
     public alertController: AlertController) {
+      // Suscribirse a eventos del router para manejar la navegación
       this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        if(this.previousUrl && event.url === '/administrador-tabs/administrador-reportes' && this.previousUrl === '/filtro-reportes') {
-          // La lógica que se ejecutara solo cuando vengamos de /filtro-reportes
-          //console.log(event.url);
-          this.filtro = this.datosFiltroService.getDatosFiltro();
-          console.log(this.filtro);
-          this.cargarReportes(this.filtro);
+        this.handleNavigation(event.url);
+      });
+
+      // Suscribirse a cambios de filtro aplicado
+      this.datosFiltroService.isFiltroAplicado().subscribe(aplicado => {
+      if (aplicado) {
+        const filtro = this.datosFiltroService.getDatosFiltro();
+        if (filtro) {
+          this.cargarReportes(filtro);
         }
-        // Actualiza la URL anterior después de toda la lógica para no sobrescribir con la actual prematuramente
-        this.previousUrl = event.url;
+        this.datosFiltroService.resetFiltroAplicado();
+      }
       });
     }
 
   ngOnInit() {
     this.cargarReportes();
   }
+
+  handleNavigation(url: string) {
+    // Actualiza la URL anterior después de toda la lógica para no sobrescribir con la actual prematuramente
+    if(this.previousUrl && url === '/administrador-tabs/administrador-reportes' && this.previousUrl === '/filtro-reportes') {
+    
+    }
+    this.previousUrl = url;
+  }  
 
   async cargarReportes(query = {}) {
     const loading = await this.loadingController.create({
