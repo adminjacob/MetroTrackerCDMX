@@ -325,7 +325,7 @@ async sendPrediction(linea: string, estacion: string, direccion: string, imagen:
 
     console.log(result);
 
-    if (result.message === "Predicción guardada de forma correcta") {
+    if (result.message.includes("Predicción guardada de forma correcta")) {
       const alert = await this.alertController.create({
         header: 'Éxito',
         message: 'Predicción guardada de forma correcta.',

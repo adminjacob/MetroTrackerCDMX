@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class PredictionService {
-  private apiUrl = 'http://189.191.143.179:80/predict'; 
+  private apiUrl = 'http://189.191.188.152:80/predict'; 
 
  constructor(private http: HttpClient) { }
 
