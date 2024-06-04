@@ -239,24 +239,42 @@ export class GenerarReportePage implements OnInit {
 
   async submitReport() {
     this.submitAttempted = true;
-
+  
     // Verificar si el formulario es válido
     if (!this.reportForm.valid) {
-        console.log('Formulario no válido, no se puede avanzar.');
-        return; // Detener la ejecución si el formulario no es válido
+      console.log('Formulario no válido, no se puede avanzar.');
+      return; // Detener la ejecución si el formulario no es válido
     }
-
-    if(this.reporte.titulo === 'Cantidad de gente en andenes' && this.photoTaken==false){
+  
+    // Verificar la distancia a la estación seleccionada
+    const miUbicacion = await this.getCurrentPosition();
+    if (miUbicacion) {
+      const distancia = this.calcularDistancia(miUbicacion.lat, miUbicacion.lng, this.estacionSeleccionada.position.lat, this.estacionSeleccionada.position.lng);
+      if (distancia > 1) {
         const alert = await this.alertController.create({
-          header: 'Alerta',
-          message: 'Cuando se selecciona Cantidad de gente en andenes, es necesario subir una fotografía',
+          header: 'Error',
+          message: 'No puedes enviar un reporte si estás a más de 1 km de la estación seleccionada.',
           buttons: ['OK']
         });
-      
         await alert.present();
-        return; // Detener la ejecución si el formulario no es válido
+        return; // Detener la ejecución si la distancia es mayor a 1 km
+      }
+    } else {
+      console.error('No se pudo obtener la ubicación actual.');
+      return; // Detener la ejecución si no se pudo obtener la ubicación
     }
-
+  
+    if (this.reporte.titulo === 'Cantidad de gente en andenes' && this.photoTaken == false) {
+      const alert = await this.alertController.create({
+        header: 'Alerta',
+        message: 'Cuando se selecciona Cantidad de gente en andenes, es necesario subir una fotografía',
+        buttons: ['OK']
+      });
+  
+      await alert.present();
+      return; // Detener la ejecución si no se ha subido una fotografía
+    }
+  
     // Crear reporte
     const formData = new FormData();
     formData.append('descripcion', this.reporte.descripcion);
@@ -267,82 +285,80 @@ export class GenerarReportePage implements OnInit {
     formData.append('direccion', this.reporte.direccion);
     // Agregar la imagen si está presente
     if (this.selectedFile) {
-        formData.append('imagen', this.selectedFile, this.selectedFile.name);
+      formData.append('imagen', this.selectedFile, this.selectedFile.name);
     }
-
+  
     try {
-        const result = await this.reportService.crearReporte(formData).toPromise();
-
-        if (result === "Reporte creado de forma exitosa") {
-            const alert = await this.alertController.create({
-                header: 'Éxito',
-                message: 'Reporte creado de forma exitosa',
-                buttons: [{
-                    text: 'Aceptar',
-                    handler: () => {
-                        this.datosFiltroService.reporteGenerado(); // Notificar que se ha generado un reporte
-
-                        if(this.reporte.titulo === 'Cantidad de gente en andenes'){
-                          this.sendPrediction(this.reporte.linea,this.reporte.estacion,this.reporte.direccion,this.selectedFile);
-                        }
-
-                        this.navCtrl.back(); // Navegar hacia atrás
-
-                    }
-                }]
-            });
-
-            await alert.present();
-
-            
-
-        } else {
-            const alert = await this.alertController.create({
-                header: 'Error',
-                message: 'Ocurrió un error al generar el reporte',
-                buttons: ['Aceptar']
-            });
-
-            await alert.present();
-        }
+      const result = await this.reportService.crearReporte(formData).toPromise();
+  
+      if (result === "Reporte creado de forma exitosa") {
+        const alert = await this.alertController.create({
+          header: 'Éxito',
+          message: 'Reporte creado de forma exitosa',
+          buttons: [{
+            text: 'Aceptar',
+            handler: () => {
+              this.datosFiltroService.reporteGenerado(); // Notificar que se ha generado un reporte
+  
+              if (this.reporte.titulo === 'Cantidad de gente en andenes') {
+                this.sendPrediction(this.reporte.linea, this.reporte.estacion, this.reporte.direccion, this.selectedFile);
+              }
+  
+              this.navCtrl.back(); // Navegar hacia atrás
+            }
+          }]
+        });
+  
+        await alert.present();
+  
+      } else {
+        const alert = await this.alertController.create({
+          header: 'Error',
+          message: 'Ocurrió un error al generar el reporte',
+          buttons: ['Aceptar']
+        });
+  
+        await alert.present();
+      }
     } catch (error) {
-        console.error('Error al crear el reporte: ', error);
+      console.error('Error al crear el reporte: ', error);
     }
-}
-
-async sendPrediction(linea: string, estacion: string, direccion: string, imagen: File) {
-  // Crear reporte
-  const formData2 = new FormData();
-  formData2.append('line', linea);
-  formData2.append('station', estacion);
-  formData2.append('direction', direccion);
-  // Agregar la imagen si está presente
-  if (imagen) {
-    formData2.append('file', imagen, imagen.name);
   }
+  
 
-  this.predictionService.sendPrediction(formData2).subscribe(async result => {
-
-    console.log(result);
-
-    if (result.message.includes("Predicción guardada de forma correcta")) {
-      const alert = await this.alertController.create({
-        header: 'Éxito',
-        message: 'Predicción guardada de forma correcta.',
-        buttons: ['OK']
-      });
-
-      await alert.present();
-    } else {
-      const alert = await this.alertController.create({
-        header: 'Error',
-        message: 'Ocurrió un error al guardar la predicción.',
-        buttons: ['OK']
-      });
-
-      await alert.present();
+  async sendPrediction(linea: string, estacion: string, direccion: string, imagen: File) {
+    // Crear reporte
+    const formData2 = new FormData();
+    formData2.append('line', linea);
+    formData2.append('station', estacion);
+    formData2.append('direction', direccion);
+    // Agregar la imagen si está presente
+    if (imagen) {
+      formData2.append('file', imagen, imagen.name);
     }
-  });
-}
+
+    this.predictionService.sendPrediction(formData2).subscribe(async result => {
+
+      console.log(result);
+
+      if (result.message.includes("Predicción guardada de forma correcta")) {
+        const alert = await this.alertController.create({
+          header: 'Éxito',
+          message: 'Predicción guardada de forma correcta.',
+          buttons: ['OK']
+        });
+
+        await alert.present();
+      } else {
+        const alert = await this.alertController.create({
+          header: 'Error',
+          message: 'Ocurrió un error al guardar la predicción.',
+          buttons: ['OK']
+        });
+
+        await alert.present();
+      }
+    });
+  }
 
 }
