@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class PredictionService {
-  private apiUrl = 'https://c74e-2806-105e-1c-ee49-c83f-36ca-a89c-f878.ngrok-free.app/predict'; 
+  private apiUrl = 'https://7c60-189-216-156-132.ngrok-free.app/predict'; 
 
  constructor(private http: HttpClient) { }
 

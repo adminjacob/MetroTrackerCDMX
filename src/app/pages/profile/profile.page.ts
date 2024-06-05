@@ -44,8 +44,8 @@ export class ProfilePage implements OnInit {
     this.router.navigate(['edit-profile']);
   }
 
-  irANotificaciones(){
-    this.navCtrl.navigateForward('/notificaciones');
+  irACalificaExperiencia(){
+    window.open('https://forms.gle/6UDQMrpLYgTXBAzs9', '_blank');
   }
 
   async abrirPDF() {
